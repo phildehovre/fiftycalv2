@@ -17,7 +17,8 @@ function App() {
         .insert([
           { some_column: 'someValue', other_column: 'otherValue' },
         ])
-    })()
+    })().then((res) => console.log(res))
+      .catch(err => alert(err))
 
   }, [])
 
