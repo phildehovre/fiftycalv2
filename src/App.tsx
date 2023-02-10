@@ -5,23 +5,11 @@ import Homepage from '../src/pages/Homepage'
 import Nav from './components/Nav'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { createClient } from '@supabase/supabase-js'
+import CreateTemplatePage from './pages/CreateTemplatePage'
+import CreateEventPage from './pages/CreateEventPage'
 
-export const supabase = createClient("https://jczttxmgknqmhdwgpmvl.supabase.co", import.meta.env.VITE_REACT_APP_SUPABASE_API_KEY)
+export const supabase = createClient(import.meta.env.VITE_REACT_APP_SUPABASE_PROJECT_URL, import.meta.env.VITE_REACT_APP_SUPABASE_API_KEY)
 function App() {
-
-
-  useEffect(() => {
-    (async () => {
-      const { data, error } = await supabase
-        .from('dummy')
-        .insert([
-          { some_column: 'someValue', other_column: 'otherValue' },
-        ])
-    })().then((res) => console.log(res))
-      .catch(err => alert(err))
-
-  }, [])
-
 
 
   return (
@@ -30,6 +18,8 @@ function App() {
         <Nav />
         <Routes>
           <Route element={<Homepage />} path='/' />
+          <Route element={<CreateTemplatePage />} path='/template' />
+          <Route element={<CreateEventPage />} path='/event' />
         </Routes>
       </Router>
     </div>

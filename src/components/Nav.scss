@@ -1,0 +1,39 @@
+.nav-ctn {
+    height: 10vh;
+    position: absolute;
+    border-bottom: 1px solid #151515;
+    width: 100vw;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+
+    .links-ctn {
+        width: 20%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 0 2em;
+    }
+
+    .btn-ctn {
+        display: flex;
+        justify-content: space-evenly;
+        width: 30%;
+        align-items: center;
+    }
+
+    .user-icon {
+        border-radius: 100%;
+        border: grey 1px;
+        height: 3em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 3em;
+        background-color: black;
+        cursor: pointer;
+    }
+}
