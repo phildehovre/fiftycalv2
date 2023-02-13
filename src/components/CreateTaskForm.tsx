@@ -1,18 +1,17 @@
 import React from 'react'
-import { useState, useContext } from 'react'
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
-import { v4 as uuidv4 } from 'uuid'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '../App'
 import Spinner from './Spinner'
 import './CreateTemplateForm.scss'
-import { useNavigate } from 'react-router'
 import './TaskSlice.scss'
+import { useNavigate } from 'react-router'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlusSquare, faSign } from '@fortawesome/free-solid-svg-icons'
+import { faPlusSquare } from '@fortawesome/free-solid-svg-icons'
+import { TemplateObj } from '../types/types'
 
 
 const schema = yup.object().shape({
@@ -25,10 +24,11 @@ const schema = yup.object().shape({
 })
 
 function CreateTaskForm(props: {
-    template: { template_id: string },
+    template: TemplateObj,
 }) {
 
     const { register, handleSubmit, formState: { errors } } = useForm({ resolver: yupResolver(schema) })
+    const queryClient = useQueryClient()
 
 
     const session = useSession()
@@ -55,7 +55,7 @@ function CreateTaskForm(props: {
             'author': session?.user.id,
         };
         addTemplateEvent.mutateAsync(event).then((res) => {
-            alert(res.data)
+            queryClient.invalidateQueries({ queryKey: ['template_events'] })
         }).catch(err => alert(err))
     };
 
@@ -67,7 +67,7 @@ function CreateTaskForm(props: {
                 className='task_form-ctn'>
                 <div className='task_form-input-ctn'>
                     <span>
-                        <input className='task_form-input'
+                        <input className={`task_form-input ${errors.position ? 'error' : ''}`}
                             {...register('position')}
                             name='position'
                             defaultValue='50'
@@ -88,11 +88,10 @@ function CreateTaskForm(props: {
                     </span>
                 </div>
                 <div className='task_form-input-ctn'>
-                    <input
+                    <input className={`task_form-input ${errors.category ? 'error' : ''}`}
                         {...register('category')}
                         name='category'
-                        type='text' placeholder='Category'
-                        className='task_form-input'>
+                        type='text' placeholder='Category'>
                     </input>
                 </div>
 
@@ -101,14 +100,14 @@ function CreateTaskForm(props: {
                         {...register('description')}
                         name='description'
                         type='text' placeholder='Task description'
-                        className='task_form-input'
+                        className={`task_form-input ${errors.description ? 'error' : ''}`}
                     ></input>
                 </div>
                 <div className='task_form-input-ctn'>
                     <select
                         {...register('entity_responsible')}
                         name='entity_responsible'
-                        className='task_form-input'
+                        className={`task_form-input ${errors.entity_responsible ? 'error' : ''}`}
                     >
                         <option value='supplier'>Supplier</option>
                         <option value='label'>Label</option>

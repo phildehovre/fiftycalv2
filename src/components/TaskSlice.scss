@@ -1,6 +1,7 @@
 .task_form-ctn {
     display: flex;
     width: 90vw;
+    margin-top: 1em;
 }
 
 .task_form-input-ctn {
@@ -20,4 +21,28 @@
         border: 1px solid red
     }
 
+}
+
+.slice-ctn {
+    display: flex;
+    width: 90vw;
+    justify-content: space-between;
+
+    &>span {
+        display: flex;
+        min-width: 20%;
+
+        &>.slice-cell {
+            width: 100%;
+        }
+    }
+}
+
+.slice-cell {
+    font-size: .9em;
+    min-width: fit-content;
+    width: 100%;
+    text-align: left;
+    border: 1px solid grey;
+    padding: 1em;
 }

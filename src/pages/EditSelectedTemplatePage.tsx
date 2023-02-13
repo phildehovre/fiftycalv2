@@ -10,18 +10,24 @@ function EditSelectedTemplatePage() {
     const context = useContext(selectedTemplateContext)
     const params = useParams()
 
-    const { data, isLoading, error } = useTemplate(params.id!!)
+    const {
+        data: templateData,
+        isLoading: isTemplateLoading,
+        error: templateError
+    } = useTemplate(params.id!!)
+
+
 
     useEffect(() => {
-        if (error) alert(error)
-    }, [error])
+        if (templateError) alert(templateError)
+    }, [templateError])
 
 
     return (
         <>
-            {isLoading && !data
+            {isTemplateLoading && !templateData
                 ? <Spinner />
-                : <EditTemplateForm template={data?.data} />
+                : <EditTemplateForm template={templateData?.data} />
             }
         </>
 
