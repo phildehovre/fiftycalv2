@@ -8,14 +8,19 @@ import { v4 as uuidv4 } from 'uuid'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '../App'
 import Spinner from './Spinner'
+import './CreateTemplateForm.scss'
+import { useNavigate } from 'react-router'
 
 
 const schema = yup.object().shape({
-    name: yup.string().required('A name is required for the template'),
-    description: yup.string().required('A description is required for the template'),
+    name: yup.string().required('A name is required'),
+    description: yup.string().required('A description is required'),
     span: yup.number().required('A duration is required'),
     permissions: yup.string().required('Select a permission level'),
+    // artist: yup.string().required('An artist name is required'),
 })
+
+// 'id': uuidv4().toString().split('-').join('')
 
 function CreateEventForm() {
 
@@ -23,6 +28,7 @@ function CreateEventForm() {
 
 
     const session = useSession()
+    const navigate = useNavigate()
 
     const addTemplate = useMutation({
         mutationFn: async (event: any) => await supabase
@@ -41,62 +47,100 @@ function CreateEventForm() {
             'template_id': uuidv4(),
             'author': session?.user.id
         };
-        addTemplate.mutateAsync(event).then(() => {
-
-        })
+        addTemplate.mutateAsync(event).then((res) => {
+            if (res.data !== null) {
+                navigate(`/template/${res.data[0].template_id}`)
+            }
+        }).catch(err => alert(err))
     };
 
-    console.log(addTemplate.data)
     return (
         <div>
             <h3>Create event: </h3>
-            <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', flexDirection: 'column', padding: '1em' }}>
+            <form
+                onSubmit={handleSubmit(onSubmit)}
+                className='template_form-ctn'>
                 {/* <label className='form-error'>{errors.firstName?.message}</label> */}
-                <label>Duration of the template</label>
-                {errors &&
-                    //@ts-ignore
-                    <p className='form-error-msg'>{errors.span?.message}</p>
-                }
-                <div>
-                    <input
-                        {...register('span')}
-                        name='span'
-                        type='number'
-                        placeholder='30'
-                        min='1'
-                        max='100'
-                    ></input><span> day(s)</span>
+                <div className='template_form-input-ctn'>
+                    <label>Duration:
+                        {errors &&
+                            //@ts-ignore
+                            <p className='form-error-msg'>{errors.span?.message}</p>
+                        }
+                    </label>
+                    <div className='template_form-input-ctn'>
+                        <input className='template_form-input'
+                            {...register('span')}
+                            name='span'
+                            defaultValue='50'
+                            type='number'
+                            placeholder='50'
+                            min='1'
+                            max='100'
+                        ></input>
+                        <span> day(s)</span>
+                    </div>
                 </div>
-                <label>Name</label>
-                {errors &&
-                    //@ts-ignore
-                    <p className='form-error-msg'>{errors.name?.message}</p>
-                }
-                <input
-                    {...register('name')}
-                    name='name'
-                    type='text' placeholder='Template name'></input>
-                <label>Description</label>
-                {errors &&
-                    //@ts-ignore
-                    <p className='form-error-msg'>{errors.description?.message}</p>
-                }
-                <input
-                    {...register('description')}
-                    name='description'
-                    type='text' placeholder='Template description'></input>
-                <label>Who can edit this template</label>
-                <select
-                    {...register('permissions')}
-                    name='permissions'
-                >
-                    <option value={session?.user.id}>Myself</option>
-                    <option value='user'>Members</option>
-                    <option value='admin'>Admins</option>
-                </select>
+                {/* <div className='template_form-input-ctn'>
+                    <label>Artist:
+                        {errors &&
+                            //@ts-ignore
+                            <p className='form-error-msg'>{errors.artist?.message}</p>
+                        }
+                    </label>
+
+                    <input
+                        {...register('artist')}
+                        name='artist'
+                        type='text' placeholder='Artist name'
+                        className='template_form-input'>
+                    </input>
+                </div> */}
+                <div className='template_form-input-ctn'>
+                    <label>Name:
+
+                        {errors &&
+                            //@ts-ignore
+                            <p className='form-error-msg'>{errors.name?.message}</p>
+                        }
+                    </label>
+                    <input
+                        {...register('name')}
+                        name='name'
+                        type='text' placeholder='Template name'
+                        className='template_form-input'>
+                    </input>
+                </div>
+
+                <div className='template_form-input-ctn'>
+                    <label>Description:
+                        {errors &&
+                            //@ts-ignore
+                            <p className='form-error-msg'>{errors.description?.message}</p>
+                        }
+                    </label>
+                    <input
+                        {...register('description')}
+                        name='description'
+                        type='text' placeholder='Template description'
+                        className='template_form-input'
+                    ></input>
+                </div>
+                <div className='template_form-input-ctn'>
+                    <label>Who can edit this template: </label>
+                    <select
+                        {...register('permissions')}
+                        name='permissions'
+                        className='template_form-input'
+                    >
+                        <option value={session?.user.id}>Myself</option>
+                        <option value='user'>Members</option>
+                        <option value='admin'>Admins</option>
+                    </select>
+                </div>
                 <button type='submit'>{addTemplate.isLoading ? <Spinner /> : 'Create template'}</button>
             </form>
-        </div>
+        </div >
     )
 }
 

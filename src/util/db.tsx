@@ -2,21 +2,21 @@ import { useQueryClient, useQuery, useMutation } from '@tanstack/react-query';
 import { supabase } from '../App';
 
 
-export const addTemplate = useMutation({
-    mutationFn: async (template: object) => {
-        const res = await supabase
-            .from('templates')
-            .insert([template])
-            .select()
-    }
-})
+// export const addTemplate = useMutation({
+//     mutationFn: async (template: object) => {
+//         const res = await supabase
+//             .from('templates')
+//             .insert([template])
+//             .select()
+//     }
+// });
 
 const fetchTemplate = async (id: string) => {
     try {
         const res = await supabase
             .from('templates')
             .select()
-            .eq('id', id)
+            .eq('template_id', id)
             .single()
         return res
     }
@@ -50,6 +50,21 @@ export function useTemplates() {
     return useQuery(
         ['templates'],
         () => fetchTemplates()
+    )
+};
+
+async function fetchTemplateEvents(templateId: string) {
+    let res = await supabase
+        .from('template_events')
+        .select('*')
+        .eq('template_id', templateId)
+    return res
+};
+
+export function useTemplateEvents(id: string) {
+    return useQuery(
+        ['template_events', id],
+        () => fetchTemplateEvents(id)
     )
 };
 

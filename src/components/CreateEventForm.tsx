@@ -36,7 +36,7 @@ function CreateEventForm() {
     const onSubmit = (event: any) => {
         addEvent.mutateAsync()
             .then(res => {
-                console.log(addEvent.data)
+                console.log(res)
             }
 
             )
@@ -45,6 +45,7 @@ function CreateEventForm() {
 
     const createEvent = async () => {
         const event = {
+            'id': uuidv4().toString().split('-').join(''),
             'summary': eventName,
             'description': eventDescription,
             'start': {
@@ -64,19 +65,20 @@ function CreateEventForm() {
                     // @ts-ignore
                     'Authorization': 'Bearer ' + session.provider_token
                 },
-                body: JSON.stringify(event)
+                body: JSON.stringify(event),
             })
 
                 .then(
                     async (data) => {
-                        const res = await supabase
+                        await supabase
                             .from('events')
                             .insert(data)
                             .select()
-                        console.log(res)
+                        console.log(data)
+
                     }
                 ).then((data) => {
-                    // console.log(data)
+                    console.log(data)
                 });
         } catch (error) {
             alert('Unable to create event at this time: ' + error)
