@@ -21,7 +21,7 @@ function Nav() {
                 {session
                     ? <>
                         <Link to='/template'>New template</Link>
-                        <Link to='/event'>New event</Link>
+                        <Link to='/campaign'>New Campaign</Link>
                         <SupabaseSignOut />
                         <div className='user-icon'>
                             {

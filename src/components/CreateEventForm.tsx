@@ -34,6 +34,7 @@ function CreateEventForm() {
     // @ts-ignore
     // const { addEventToTemplate, createTemplate } = useContext(TemplateContext)
     const onSubmit = (event: any) => {
+        console.log(event)
         addEvent.mutateAsync()
             .then(res => {
                 console.log(res)
@@ -132,7 +133,6 @@ function CreateEventForm() {
                 />
                 <label>End date and time:</label>
                 <DateTimePicker
-                    {...register('endDate')}
                     {...register('endDate')}
                     name='endDate'
                     value={end} onChange={setEnd} />

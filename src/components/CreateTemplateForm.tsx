@@ -10,6 +10,7 @@ import { supabase } from '../App'
 import Spinner from './Spinner'
 import './CreateTemplateForm.scss'
 import { useNavigate } from 'react-router'
+import { selectedTemplateContext } from '../contexts/SelectedTemplateContext'
 
 
 const schema = yup.object().shape({
@@ -30,6 +31,9 @@ function CreateEventForm() {
     const session = useSession()
     const navigate = useNavigate()
 
+    //@ts-ignore
+    const { setSelectedTemplateId } = useContext(selectedTemplateContext)
+
     const addTemplate = useMutation({
         mutationFn: async (event: any) => await supabase
             .from('templates')
@@ -45,10 +49,11 @@ function CreateEventForm() {
             'span': span,
             'permissions': permissions,
             'template_id': uuidv4(),
-            'author': session?.user.id
+            'author_id': session?.user.id
         };
         addTemplate.mutateAsync(event).then((res) => {
             if (res.data !== null) {
+                setSelectedTemplateId(res.data[0].template_id)
                 navigate(`/template/${res.data[0].template_id}`)
             }
         }).catch(err => alert(err))
@@ -81,21 +86,6 @@ function CreateEventForm() {
                         <span> day(s)</span>
                     </div>
                 </div>
-                {/* <div className='template_form-input-ctn'>
-                    <label>Artist:
-                        {errors &&
-                            //@ts-ignore
-                            <p className='form-error-msg'>{errors.artist?.message}</p>
-                        }
-                    </label>
-
-                    <input
-                        {...register('artist')}
-                        name='artist'
-                        type='text' placeholder='Artist name'
-                        className='template_form-input'>
-                    </input>
-                </div> */}
                 <div className='template_form-input-ctn'>
                     <label>Name:
 
@@ -123,7 +113,7 @@ function CreateEventForm() {
                         {...register('description')}
                         name='description'
                         type='text' placeholder='Template description'
-                        className='template_form-input'
+                        className='template_form-input id'
                     ></input>
                 </div>
                 <div className='template_form-input-ctn'>

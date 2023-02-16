@@ -10,7 +10,7 @@ function SupabaseLogin() {
     const supabase = useSupabaseClient(); // talk to supabase
 
     async function signOut() {
-        await supabase.auth.signOut()
+        await supabase.auth.signOut().then(() => sessionStorage.clear())
     }
 
     return (

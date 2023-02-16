@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -11,7 +11,9 @@ import './TaskSlice.scss'
 import { useNavigate } from 'react-router'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlusSquare } from '@fortawesome/free-solid-svg-icons'
-import { TemplateObj } from '../types/types'
+import { TaskObj, TemplateObj } from '../types/types'
+import { selectedTemplateContext } from '../contexts/SelectedTemplateContext'
+import { convertPositionToDays } from '../utils/helpers'
 
 
 const schema = yup.object().shape({
@@ -24,12 +26,19 @@ const schema = yup.object().shape({
 })
 
 function CreateTaskForm(props: {
-    template: TemplateObj,
+    task: TaskObj | undefined,
+    type: 'edit' | 'create',
+    indexOfEdited: () => void,
+    setIsCreatingTask: () => void
 }) {
 
+
+    const { task, setIsCreatingTask, setIndexOfEdited } = props
     const { register, handleSubmit, formState: { errors } } = useForm({ resolver: yupResolver(schema) })
     const queryClient = useQueryClient()
 
+    //@ts-ignore
+    const { selectedTemplateId } = useContext(selectedTemplateContext)
 
     const session = useSession()
     const navigate = useNavigate()
@@ -41,23 +50,54 @@ function CreateTaskForm(props: {
             .select(),
     });
 
+    const updateTemplateEvent = useMutation({
+        mutationFn: async (task: any) => await supabase
+            .from('template_events')
+            .insert(task)
+            .eq('id', task.id)
+        // .select()
+    });
+
+    const deleteTemplateEvent = useMutation({
+        mutationFn: async (task: TaskObj) => await supabase
+            .from('template_events')
+            .delete()
+            .eq('id', task.id)
+    });
+
     const onSubmit = (data: any) => {
-        console.log(data)
         const { position, type, category, entity_responsible, description, position_units } = data
         const event = {
-            'position': position,
+            'position': convertPositionToDays(position, position_units),
             'position_units': position_units,
             'category': category,
             'description': description,
             'entity_responsible': entity_responsible,
             'type': type,
-            'template_id': props.template.template_id,
-            'author': session?.user.id,
+            'template_id': selectedTemplateId,
+            'author_id': session?.user.id,
         };
+
+        if (props.type === 'edit') {
+            deleteTemplateEvent.mutateAsync(task).then((res) => {
+                queryClient.invalidateQueries({ queryKey: ['template_events'] })
+            }
+            )
+            updateTemplateEvent.mutateAsync(event)
+                .then((res) => { console.log(res) })
+                .catch(err => { console.log(err) })
+                .then((res) => {
+                    queryClient.invalidateQueries({ queryKey: ['template_events'] });
+                    () => setIsCreatingTask(false)
+                    setIndexOfEdited(undefined)
+                })
+            return
+        }
         addTemplateEvent.mutateAsync(event).then((res) => {
             queryClient.invalidateQueries({ queryKey: ['template_events'] })
-        }).catch(err => alert(err))
+        }).catch(err => console.log(err))
     };
+
 
 
     return (
@@ -70,7 +110,7 @@ function CreateTaskForm(props: {
                         <input className={`task_form-input ${errors.position ? 'error' : ''}`}
                             {...register('position')}
                             name='position'
-                            defaultValue='50'
+                            defaultValue={task?.position || 50}
                             type='number'
                             placeholder='50'
                             min='1'
@@ -80,6 +120,7 @@ function CreateTaskForm(props: {
                             {...register('position_units')}
                             name='position_units'
                             className='task_form-input'
+                            defaultValue={task?.position_units || 'week(s)'}
                         >
                             <option value='days'>Days before</option>
                             <option value='weeks'>Week(s) before</option>
@@ -91,7 +132,9 @@ function CreateTaskForm(props: {
                     <input className={`task_form-input ${errors.category ? 'error' : ''}`}
                         {...register('category')}
                         name='category'
-                        type='text' placeholder='Category'>
+                        type='text' placeholder='Category'
+                        defaultValue={task?.category}
+                    >
                     </input>
                 </div>
 
@@ -101,6 +144,7 @@ function CreateTaskForm(props: {
                         name='description'
                         type='text' placeholder='Task description'
                         className={`task_form-input ${errors.description ? 'error' : ''}`}
+                        defaultValue={task?.description}
                     ></input>
                 </div>
                 <div className='task_form-input-ctn'>
@@ -108,6 +152,7 @@ function CreateTaskForm(props: {
                         {...register('entity_responsible')}
                         name='entity_responsible'
                         className={`task_form-input ${errors.entity_responsible ? 'error' : ''}`}
+                        defaultValue={task?.entity_responsible}
                     >
                         <option value='supplier'>Supplier</option>
                         <option value='label'>Label</option>
@@ -122,6 +167,7 @@ function CreateTaskForm(props: {
                         {...register('type')}
                         name='type'
                         className='task_form-input'
+                        defaultValue={task?.type}
                     >
                         <option value='action'>Action</option>
                         <option value='creative'>Creative</option>
@@ -130,7 +176,7 @@ function CreateTaskForm(props: {
                         <option value='announcement'>Announcement</option>
                     </select>
                 </div>
-                <button type='submit'>{addTemplateEvent.isLoading ? <Spinner /> : <FontAwesomeIcon icon={faPlusSquare} />}</button>
+                <button className='submit-btn' type='submit'>{addTemplateEvent.isLoading ? <Spinner /> : <FontAwesomeIcon icon={faPlusSquare} />}</button>
             </form>
         </div >
     )

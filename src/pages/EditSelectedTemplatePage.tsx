@@ -24,12 +24,13 @@ function EditSelectedTemplatePage() {
 
 
     return (
-        <>
+        <div>
+            <h2>{templateData?.data.name}</h2>
             {isTemplateLoading && !templateData
                 ? <Spinner />
                 : <EditTemplateForm template={templateData?.data} />
             }
-        </>
+        </div>
 
     )
 }

@@ -37,6 +37,32 @@ export function useTemplate(id: string) {
         }
     )
 };
+const fetchCampaign = async (id: string) => {
+    try {
+        const res = await supabase
+            .from('campaigns')
+            .select()
+            .eq('campaign_id', id)
+            .single()
+        return res
+    }
+
+    catch (error) {
+        console.log(error)
+    }
+
+    finally {
+    }
+};
+
+export function useCampaign(id: string) {
+    return useQuery(
+        ['campaign', { id }], () => fetchCampaign(id),
+        {
+            enabled: !!id
+        }
+    )
+};
 
 
 async function fetchTemplates() {

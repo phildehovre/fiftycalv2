@@ -24,25 +24,35 @@
 }
 
 .slice-ctn {
+    position: relative;
     display: flex;
     width: 90vw;
     justify-content: space-between;
 
     &>span {
         display: flex;
-        min-width: 20%;
-
-        &>.slice-cell {
-            width: 100%;
-        }
+        // min-width: 20%;
     }
 }
 
 .slice-cell {
     font-size: .9em;
-    min-width: fit-content;
+    max-width: 100%;
     width: 100%;
     text-align: left;
     border: 1px solid grey;
     padding: 1em;
+
+}
+
+.edit_delete-ctn {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.submit-btn {
+    position: absolute;
+    right: 4%;
+    transform: translateY(3px);
 }

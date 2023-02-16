@@ -1,12 +1,15 @@
 import React, { useState } from 'react'
+import { TemplateObj } from '../types/types'
 
 export const selectedTemplateContext = React.createContext({})
 
 function SelectedTemplateContextProvider(props: { children: React.ReactNode }) {
 
-    const [selectedTemplate, setSelectedTemplate] = useState<string>('')
+    const [selectedTemplateId, setSelectedTemplateId] = useState<string>('')
 
-    const values = { selectedTemplate, setSelectedTemplate }
+    const values = { selectedTemplateId, setSelectedTemplateId }
+
+    console.log(selectedTemplateId)
 
     return (
         <selectedTemplateContext.Provider

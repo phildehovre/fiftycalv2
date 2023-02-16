@@ -5,18 +5,17 @@ import { faPlusCircle } from '@fortawesome/free-solid-svg-icons'
 import TaskSlice from './TaskSlice'
 import { TaskObj, TemplateObj } from '../types/types'
 import { useTemplateEvents } from '../util/db'
-import { useQueryClient } from '@tanstack/react-query'
+
 
 
 function EditTemplateForm(props: {
     template: TemplateObj
 }) {
 
-    const [isEditingTask, setIsEditingTask] = useState(false)
+    const [isCreatingTask, setIsCreatingTask] = useState(false)
+    const [indexOfEdited, setIndexOfEdited] = React.useState()
 
     const { template } = props
-
-    const queryClient = useQueryClient()
 
     const {
         data: templateEventsData,
@@ -26,13 +25,18 @@ function EditTemplateForm(props: {
 
 
     const renderTemplateEvents = () => {
-        return templateEventsData?.data.map((e, i) => {
+        let templatesSorted = templateEventsData?.data?.sort((a, b) => { return b.position - a.position })
+        return templatesSorted?.map((e, i) => {
             return (
                 <TaskSlice
                     task={e}
                     key={i}
                     template={template}
                     type={'data'}
+                    taskIndex={i}
+                    indexOfEdited={indexOfEdited}
+                    //@ts-ignore
+                    setIndexOfEdited={setIndexOfEdited}
                 />
             )
         })
@@ -45,14 +49,19 @@ function EditTemplateForm(props: {
                 <>
                     {
                         isTemplateEventsLoading
-                            ? <TaskSlice task={undefined} template={template} type='placeholder' />
+                            //@ts-ignore
+                            ? <TaskSlice task={undefined} task={templateEventsData?.data[indexOfEdited]} template={template} type='placeholder' />
                             : renderTemplateEvents()
                     }
                     {
-                        isEditingTask
-                            ? <TaskSlice template={template} task={undefined} type='edit' />
+                        isCreatingTask
+                            ? <TaskSlice template={template} type='create'
+                                setIscreatingTask={setIsCreatingTask}
+                                //@ts-ignore
+                                setIndexOfEdited={setIndexOfEdited}
+                            />
                             : <div className='add_task-btn'
-                                onClick={() => setIsEditingTask(true)}
+                                onClick={() => setIsCreatingTask(true)}
                             >New task<span><FontAwesomeIcon icon={faPlusCircle} size={'xl'} /></span></div>
                     }
                 </>

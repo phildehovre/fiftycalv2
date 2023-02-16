@@ -1,0 +1,12 @@
+.sidebar-ctn {
+    display: flex;
+    position: relative;
+    border-right: 2px solid #373737;
+    height: 100vh;
+    max-width: 40px;
+    flex-direction: column;
+}
+
+.sidebar-btn {
+    cursor: pointer;
+}
