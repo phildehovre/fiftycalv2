@@ -9,8 +9,6 @@ function SelectedTemplateContextProvider(props: { children: React.ReactNode }) {
 
     const values = { selectedTemplateId, setSelectedTemplateId }
 
-    console.log(selectedTemplateId)
-
     return (
         <selectedTemplateContext.Provider
             value={values}

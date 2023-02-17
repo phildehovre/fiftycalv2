@@ -94,20 +94,20 @@ export function useTemplateEvents(id: string) {
     )
 };
 
-async function fetchEvents(id: any) {
+async function fetchCampaignEvents(id: string) {
     let res = await supabase
-        .from('events')
+        .from('campaign_events')
         .select('*')
-        .eq('template_id', id)
+        .eq('campaign_id', id)
     return res
 };
 
-export function useEvents(templateId: any) {
+export function useCampaignEvents(id: any) {
     return useQuery(
-        ['events'],
-        () => fetchEvents(templateId),
+        ['campaign_events', id],
+        () => fetchCampaignEvents(id),
         {
-            enabled: !!templateId
+            enabled: !!id
         }
     )
 };

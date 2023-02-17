@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useEffect, useRef } from 'react'
 import './EventSlice.scss'
 import { useForm } from 'react-hook-form'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '../App'
 
 function EventCell(props: {
@@ -25,6 +25,7 @@ function EventCell(props: {
     const [edit, setEdit] = React.useState(false)
     const [isHovered, setIsHovered] = React.useState(false)
 
+    const queryClient = useQueryClient()
     const { register, handleSubmit, formState: { errors } } = useForm()
 
 
@@ -50,7 +51,6 @@ function EventCell(props: {
     }
 
     const updateCellFn = async ({ id, key, val }) => {
-        console.log(id, key, val)
         return await supabase
             .from('campaign_events')
             .update({ [key]: val })
@@ -58,15 +58,21 @@ function EventCell(props: {
     }
 
     const updateCell = useMutation({
-        mutationFn: ({ id, key, val }) => updateCellFn({ id, key, val })
+        mutationFn: ({ id, key, val }) => updateCellFn({ id, key, val }),
     })
 
     const onSubmit = (formData: any) => {
+        console.log(formData)
         let keys = Object.keys(formData)
         let key = keys[0]
         let value = formData[key]
         console.log(value)
-        updateCell.mutateAsync({ id: eventId, key: key, val: value }).then((res) => console.log(res))
+        updateCell.mutateAsync({ id: eventId, key: key, val: value }).then((res) => {
+            queryClient.invalidateQueries({ queryKey: ['campaign_events'] })
+            console.log(res)
+        }
+
+        )
     }
 
 

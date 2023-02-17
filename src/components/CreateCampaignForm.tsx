@@ -30,6 +30,7 @@ function CreateCampaignForm(props: {
 }) {
     const { templates, templateEvents } = props
     const { setSelectedTemplateId, selectedTemplateId } = useContext(selectedTemplateContext)
+    const { selectedCampaignId, setSelectedCampaignId } = useContext(selectedCampaignContext)
 
     useEffect(() => {
         if (templates && selectedTemplateId.length === 0) {
@@ -43,7 +44,7 @@ function CreateCampaignForm(props: {
     const navigate = useNavigate()
 
     //@ts-ignore
-    const context = useContext(selectedCampaignContext)
+
 
     const addCampaign = useMutation({
         mutationFn: async (campaign: any) => await supabase
@@ -53,14 +54,13 @@ function CreateCampaignForm(props: {
     });
 
 
-    const addDateToCampaign = (campaign: { targetDate: any }) => {
+    const addDateToCampaign = (campaign: { targetDate: any, campaign_id: string }) => {
         campaign.targetDate = targetDate
         return campaign
     }
 
     const copyTemplateEventsToCampaignEvents = useMutation({
         mutationFn: async (templateEvents: TaskObj[]) => {
-            console.log(templateEvents)
             await supabase
                 .from('campaign_events')
                 .insert(templateEvents)
@@ -79,20 +79,30 @@ function CreateCampaignForm(props: {
             'author_id': session?.user.id
         };
 
+        //@ts-ignore
         const campaign = addDateToCampaign(campaignSansDate)
 
         addCampaign.mutateAsync(campaign).then((res) => {
             if (res.data !== null) {
-                context.setSelectedCampaignId(res.data[0].campaign_id)
-                setSelectedTemplateId(res.data[0].template_id)
-                navigate(`/campaign/${res.data[0].campaign_id}`)
+                var campaignId = res.data[0].campaign_id
+                var templateId = res.data[0].template_id
 
-                sessionStorage.setItem('campaign_id', res.data[0].campaign_id)
-                sessionStorage.setItem('template_id', res.data[0].template_id)
+                sessionStorage.setItem('campaign_id', campaignId)
+                sessionStorage.setItem('template_id', templateId)
 
-                const templateEventsFormatted = formatTemplateEventsToCampaign(templateEvents)
-                copyTemplateEventsToCampaignEvents.mutateAsync(templateEventsFormatted).then(res => console.log(res))
             }
+            return res
+
+
+        }).then((res) => {
+            var campaignId = res.data[0].campaign_id
+            setSelectedCampaignId(campaignId)
+            console.log(campaignId, 'does it happen here')
+            console.log(selectedCampaignId, 'ID from context')
+            const templateEventsFormatted = formatTemplateEventsToCampaign(templateEvents, campaignId)
+            copyTemplateEventsToCampaignEvents.mutateAsync(templateEventsFormatted).then(res => { })
+            navigate(`/campaign/${campaignId}`)
+
         })
             .catch(err => alert(err))
     };
