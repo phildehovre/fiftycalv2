@@ -124,9 +124,17 @@ export function useCampaigns() {
 
 export async function postEvents(events: any[], targetDate: Date, session: any) {
     for (let i = 0; i < events.length; i++) {
-        formatAndPostEvent(events[i], targetDate, session).then(() => {
-            events = events.slice(i + 1, events.length - 1)
-        }).catch(err => alert(err));
+        if (i > 0) {
+            setTimeout(() => {
+                formatAndPostEvent(events[i], targetDate, session).then(() => {
+                    events = events.slice(i + 1, events.length - 1)
+                }).catch(err => alert(err))
+            }, 350)
+        } else {
+            formatAndPostEvent(events[i], targetDate, session).then(() => {
+                events = events.slice(i + 1, events.length - 1)
+            }).catch(err => alert(err))
+        }
     }
 }
 
@@ -136,15 +144,18 @@ async function formatAndPostEvent(eventObj: {
     description: string
     position: number,
     id: string,
-    type: string
+    type: string,
+    event_id: string
 }, targetDate: Date, session: any) {
     const { category,
         completed,
         description,
         position,
         id,
-        type } = eventObj
-
+        type,
+        event_id
+    } = eventObj
+    console.log(id)
     const start = dayjs(targetDate).subtract(position, 'days')
     const end = dayjs(targetDate).subtract(position, 'days').add(1, 'hour')
 
@@ -159,6 +170,7 @@ async function formatAndPostEvent(eventObj: {
             'dateTime': end.toISOString(),
             'timezone': Intl.DateTimeFormat().resolvedOptions().timeZone
         },
+        'id': event_id
     }
 
     try {

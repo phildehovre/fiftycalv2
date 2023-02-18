@@ -109,7 +109,6 @@ function CreateCampaignForm(props: {
 
     return (
         <div>
-            <h3>Create campaign: </h3>
             <form
                 onSubmit={handleSubmit(onSubmit)}
                 className='template_form-ctn'>

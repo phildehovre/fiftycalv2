@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from 'react'
 import CreateCampaignForm from '../components/CreateCampaignForm'
 import PageContainer from '../components/PageContainer'
+import Section from '../components/Section'
 import Spinner from '../components/Spinner'
 import { selectedTemplateContext } from '../contexts/SelectedTemplateContext'
 import { useTemplates, useTemplateEvents } from '../util/db'
@@ -14,14 +15,12 @@ function CreateCampaignPage() {
     var { data: templateEventsData } = useTemplateEvents(selectedTemplateId)
 
     return (
-        <PageContainer>
-            New Campaign:
-
+        <Section>
             {isLoading && !data && !selectedTemplateId
                 ? <Spinner />
                 : <CreateCampaignForm templates={data?.data} templateEvents={templateEventsData?.data} />
             }
-        </PageContainer>
+        </Section>
     )
 }
 

@@ -1,4 +1,5 @@
 import { TaskObj, TemplateObj } from "../types/types"
+import { v4 as uuidv4 } from 'uuid'
 
 export function convertDaysToUnits(position: number, unit: string) {
     if (unit === 'days') {
@@ -49,7 +50,8 @@ export function formatTemplateEventsToCampaign(templateEvents: TaskObj[], campai
             type,
             category,
             completed: false,
-            campaign_id: campaignId
+            campaign_id: campaignId,
+            event_id: uuidv4().split('-').join('')
         }
     })
 

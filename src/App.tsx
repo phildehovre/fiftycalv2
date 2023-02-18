@@ -24,8 +24,8 @@ function App() {
       <Router>
         <SelectedTemplateContextProvider >
           <SelectedCampaignContextProvider>
-            <Nav />
             <PageContainer>
+              <Nav />
               <Sidebar />
               <Routes>
                 <Route element={<Homepage />} path='/' />

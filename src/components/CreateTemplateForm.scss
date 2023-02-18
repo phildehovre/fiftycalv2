@@ -4,18 +4,19 @@
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
-    box-shadow: 20px 20px 40px hsla(0, 0%, 0%, 0.61);
-    padding: 1em;
+    box-shadow: 20px 20px 40px hsla(0, 0%, 0%, 0.336);
+    padding: 2em;
 
 }
 
 .template_form-input-ctn {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
+    flex-direction: column;
+
 
     &>label {
         width: fit-content;
-        padding: .5em;
     }
 
     &>p {
@@ -23,14 +24,13 @@
         margin: 0;
     }
 
+    &>select {
+        width: 100%;
+    }
+
 }
 
 .template_form-input {
-    width: 100%;
     padding: .5em;
-
-    &.id {
-        height: 3em;
-        align-items: flex-start;
-    }
+    width: 100%;
 }

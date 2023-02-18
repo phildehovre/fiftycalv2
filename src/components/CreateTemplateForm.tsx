@@ -61,30 +61,27 @@ function CreateEventForm() {
 
     return (
         <div>
-            <h3>Create event: </h3>
+            <h3>Create Template: </h3>
             <form
                 onSubmit={handleSubmit(onSubmit)}
                 className='template_form-ctn'>
                 {/* <label className='form-error'>{errors.firstName?.message}</label> */}
                 <div className='template_form-input-ctn'>
-                    <label>Duration:
+                    <label>Duration (in days):
                         {errors &&
                             //@ts-ignore
                             <p className='form-error-msg'>{errors.span?.message}</p>
                         }
                     </label>
-                    <div className='template_form-input-ctn'>
-                        <input className='template_form-input'
-                            {...register('span')}
-                            name='span'
-                            defaultValue='50'
-                            type='number'
-                            placeholder='50'
-                            min='1'
-                            max='100'
-                        ></input>
-                        <span> day(s)</span>
-                    </div>
+                    <input className='template_form-input'
+                        {...register('span')}
+                        name='span'
+                        defaultValue='50'
+                        type='number'
+                        placeholder='50'
+                        min='1'
+                        max='100'
+                    ></input>
                 </div>
                 <div className='template_form-input-ctn'>
                     <label>Name:
