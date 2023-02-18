@@ -21,7 +21,6 @@ function EventCell(props: {
         eventKey
     } = props
 
-    // console.log('cell: ', editedCell, 'slice: ', editedSlice)
     const [edit, setEdit] = React.useState(false)
     const [isHovered, setIsHovered] = React.useState(false)
 
@@ -51,6 +50,7 @@ function EventCell(props: {
     }
 
     const updateCellFn = async ({ id, key, val }) => {
+        console.log(id, key, val)
         return await supabase
             .from('campaign_events')
             .update({ [key]: val })
@@ -69,12 +69,9 @@ function EventCell(props: {
         console.log(value)
         updateCell.mutateAsync({ id: eventId, key: key, val: value }).then((res) => {
             queryClient.invalidateQueries({ queryKey: ['campaign_events'] })
-            console.log(res)
         }
-
         )
     }
-
 
     return (
         <>
@@ -91,7 +88,11 @@ function EventCell(props: {
                         defaultValue={value}
                         {...register(eventKey)}
                     ></input>
-                    : <div>{value}</div>
+                    : eventKey === 'completed'
+                        ? <input type='checkbox'
+                            {...register('completed')}
+                            defaultValue={value}></input>
+                        : <div>{value}</div>
                 }
             </form>
         </>

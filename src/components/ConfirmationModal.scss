@@ -1,0 +1,32 @@
+.modal-ctn {
+    height: clamp(250px, 150px, 50vh);
+    width: clamp(350px, 350px, 75vw);
+    background-color: rgb(34, 34, 34);
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    &>span {
+        display: flex;
+        justify-content: space-between;
+        width: 75%;
+        padding: 1.5em
+    }
+}
+
+.modal-bkg {
+    position: fixed;
+    display: flex;
+    place-content: center;
+    align-items: center;
+    background-color: hsla(0, 0%, 0%, 0.534);
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    height: 100vh;
+    width: 100vw;
+
+}

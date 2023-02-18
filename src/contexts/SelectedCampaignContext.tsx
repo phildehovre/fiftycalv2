@@ -7,7 +7,7 @@ function SelectedCampaignContextProvider(props: { children: React.ReactNode }) {
 
     const [selectedCampaignId, setSelectedCampaignId] = useState<string>('')
 
-    console.log(selectedCampaignId)
+    // console.log(selectedCampaignId)
 
     const values = { selectedCampaignId, setSelectedCampaignId }
 

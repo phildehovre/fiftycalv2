@@ -6,9 +6,6 @@ import { convertDaysToUnits } from '../utils/helpers'
 
 function EventSlice(props: { event: TaskObj }) {
 
-    const [editedCell, setEditedCell] = React.useState()
-    const [editedSlice, setEditedSlice] = React.useState()
-
     const { event } = props
 
     const renderEventCells = () => {
@@ -26,6 +23,17 @@ function EventSlice(props: { event: TaskObj }) {
                         eventId={event.id}
                         key={i}
                         type='number'
+                        eventKey={k}
+                    />
+                )
+            }
+            if (k === 'completed') {
+                return (
+                    <EventCell
+                        value={event[k]}
+                        eventId={event.id}
+                        key={i}
+                        type='checkbox'
                         eventKey={k}
                     />
                 )

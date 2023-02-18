@@ -1,30 +1,38 @@
 import React, { useContext } from 'react'
 import { useNavigate } from 'react-router'
-import { useTemplates } from '../util/db'
+import { useTemplates, useCampaigns } from '../util/db'
 import './TemplateList.scss'
 import { selectedTemplateContext } from '../contexts/SelectedTemplateContext'
+import { TemplateObj } from '../types/types'
 
 function TemplateList() {
 
 
 
-    const { data, isLoading, error } = useTemplates()
+    const { data: templatesData, isTemplatesLoading, templatesError } = useTemplates()
+    const { data: campaignsData, isCampaignsLoading, campaignsError } = useCampaigns()
 
     const navigate = useNavigate()
     //@ts-ignore
     const { setSelectedTemplateId } = useContext(selectedTemplateContext)
 
 
-    const renderTemplateList = () => {
+    const renderList = (data: any, type: string) => {
         //@ts-ignore
-        return data?.data.map((e, i) => {
+        return data.map((e, i) => {
             return (
                 <div
                     className='template-btn'
                     key={i}
                     onClick={() => {
-                        setSelectedTemplateId(e.template_id)
-                        navigate(`/template/${e.template_id}`)
+                        if (type === 'template') {
+                            setSelectedTemplateId(e.template_id)
+                            navigate(`/${type}/${e.template_id}`)
+                        }
+                        if (type === 'campaign') {
+                            setSelectedTemplateId(e.template_id)
+                            navigate(`/${type}/${e.campaign_id}`)
+                        }
                     }}
                 >{e.name}
                 </div>
@@ -34,9 +42,17 @@ function TemplateList() {
 
     return (
         <div className='template_list-ctn'>
-            {!isLoading && data &&
+            <h3 style={{ borderBottom: '1px solid darkgrey' }}>Templates</h3>
+            {!isTemplatesLoading && templatesData &&
                 <>
-                    {renderTemplateList()}
+                    {renderList(templatesData.data, 'template')}
+                </>
+            }
+            <h3 style={{ borderBottom: '1px solid darkgrey' }}>Campaigns</h3>
+            {
+                !isCampaignsLoading && campaignsData &&
+                <>
+                    {renderList(campaignsData.data, 'campaign')}
                 </>
             }
         </div>

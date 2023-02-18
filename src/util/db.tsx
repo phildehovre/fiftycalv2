@@ -1,15 +1,10 @@
 import { useQueryClient, useQuery, useMutation } from '@tanstack/react-query';
+import { StringSchema } from 'yup';
 import { supabase } from '../App';
+import dayjs from 'dayjs'
 
 
-// export const addTemplate = useMutation({
-//     mutationFn: async (template: object) => {
-//         const res = await supabase
-//             .from('templates')
-//             .insert([template])
-//             .select()
-//     }
-// });
+
 
 const fetchTemplate = async (id: string) => {
     try {
@@ -112,16 +107,6 @@ export function useCampaignEvents(id: any) {
     )
 };
 
-async function createEvent(event: any) {
-    const res = await supabase
-        .from('events')
-        .insert(event)
-        .select()
-    return res
-}
-
-
-
 async function fetchCampaigns() {
     let res = await supabase
         .from('campaigns')
@@ -136,18 +121,60 @@ export function useCampaigns() {
     );
 };
 
-// ===================== Example ============================
 
+export async function postEvents(events: any[], targetDate: Date, session: any) {
+    for (let i = 0; i < events.length; i++) {
+        formatAndPostEvent(events[i], targetDate, session).then(() => {
+            events = events.slice(i + 1, events.length - 1)
+        }).catch(err => alert(err));
+    }
+}
 
-// const addEventMutation = useMutation({
-//     mutationFn: async (event: any) => await supabase
-//         .from('events')
-//         .insert(event)
-//         .select(),
-//     onSuccess: () => {
-//         queryClient.invalidateQueries({ queryKey: ['events'] }),
-//             setShow(false)
-//         setUserIsCreatingEvent(false)
-//         setCellIndex(null)
-//     }
-// })
+async function formatAndPostEvent(eventObj: {
+    category: string,
+    completed: boolean,
+    description: string
+    position: number,
+    id: string,
+    type: string
+}, targetDate: Date, session: any) {
+    const { category,
+        completed,
+        description,
+        position,
+        id,
+        type } = eventObj
+
+    const start = dayjs(targetDate).subtract(position, 'days')
+    const end = dayjs(targetDate).subtract(position, 'days').add(1, 'hour')
+
+    const event = {
+        'summary': `${category} / ${type}`,
+        'description': description,
+        'start': {
+            'dateTime': start.toISOString(),
+            'timezone': Intl.DateTimeFormat().resolvedOptions().timeZone
+        },
+        'end': {
+            'dateTime': end.toISOString(),
+            'timezone': Intl.DateTimeFormat().resolvedOptions().timeZone
+        },
+    }
+
+    try {
+        await fetch('https://www.googleapis.com/calendar/v3/calendars/primary/events', {
+            method: 'POST',
+            headers: {
+                // @ts-ignore
+                'Authorization': 'Bearer ' + session.provider_token
+            },
+            body: JSON.stringify(event)
+        }).then((data) => {
+            return data.json();
+        }).then((data) => {
+            console.log(data)
+        });
+    } catch (error) {
+        alert('Unable to create event at this time: ' + error)
+    }
+}
