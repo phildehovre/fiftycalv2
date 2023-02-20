@@ -32,7 +32,7 @@ function CreateEventForm() {
     const navigate = useNavigate()
 
 
-    const { setSelectedTemplateId } = useContext(selectedTemplateContext)
+    const context = useContext(selectedTemplateContext)
 
     const addTemplate = useMutation({
         mutationFn: async (event: any) => await supabase
@@ -53,7 +53,7 @@ function CreateEventForm() {
         };
         addTemplate.mutateAsync(event).then((res) => {
             if (res.data !== null) {
-                setSelectedTemplateId(res.data[0].template_id)
+                context?.setSelectedTemplateId(res.data[0].template_id)
                 navigate(`/template/${res.data[0].template_id}`)
             }
         }).catch(err => alert(err))
@@ -68,9 +68,9 @@ function CreateEventForm() {
                 {/* <label className='form-error'>{errors.firstName?.message}</label> */}
                 <div className='template_form-input-ctn'>
                     <label>Duration (in days):
-                        {errors &&
+                        {errors.span &&
 
-                            <p className='form-error-msg'>{errors.span?.message}</p>
+                            <p className='form-error-msg'>Select a duration</p>
                         }
                     </label>
                     <input className='template_form-input'
@@ -86,9 +86,9 @@ function CreateEventForm() {
                 <div className='template_form-input-ctn'>
                     <label>Name:
 
-                        {errors &&
+                        {errors.name &&
 
-                            <p className='form-error-msg'>{errors.name?.message}</p>
+                            <p className='form-error-msg'>Please enter a name</p>
                         }
                     </label>
                     <input
@@ -101,9 +101,9 @@ function CreateEventForm() {
 
                 <div className='template_form-input-ctn'>
                     <label>Description:
-                        {errors &&
+                        {errors.description &&
 
-                            <p className='form-error-msg'>{errors.description?.message}</p>
+                            <p className='form-error-msg'>Describe the new template</p>
                         }
                     </label>
                     <input
