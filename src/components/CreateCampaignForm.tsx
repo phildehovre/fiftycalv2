@@ -25,15 +25,15 @@ const schema = yup.object().shape({
 
 
 function CreateCampaignForm(props: {
-    templates: TemplateObj[],
+    templates: any,
     templateEvents: TaskObj[]
 }) {
     const { templates, templateEvents } = props
-    const { setSelectedTemplateId, selectedTemplateId } = useContext(selectedTemplateContext)
+    const { selectedTemplateId, setSelectedTemplateId } = useContext(selectedTemplateContext)
     const { selectedCampaignId, setSelectedCampaignId } = useContext(selectedCampaignContext)
 
     useEffect(() => {
-        if (templates && selectedTemplateId.length === 0) {
+        if (templates && selectedTemplateId?.length === 0) {
             setSelectedTemplateId(templates[0].template_id)
         }
     });
@@ -60,7 +60,7 @@ function CreateCampaignForm(props: {
     }
 
     const copyTemplateEventsToCampaignEvents = useMutation({
-        mutationFn: async (templateEvents: TaskObj[]) => {
+        mutationFn: async (templateEvents: any) => {
             await supabase
                 .from('campaign_events')
                 .insert(templateEvents)
@@ -94,13 +94,13 @@ function CreateCampaignForm(props: {
             return res
 
 
-        }).then((res) => {
+        }).then((res: any) => {
             var campaignId = res.data[0].campaign_id
             setSelectedCampaignId(campaignId)
             console.log(campaignId, 'does it happen here')
             console.log(selectedCampaignId, 'ID from context')
             const templateEventsFormatted = formatTemplateEventsToCampaign(templateEvents, campaignId)
-            copyTemplateEventsToCampaignEvents.mutateAsync(templateEventsFormatted).then(res => { })
+            copyTemplateEventsToCampaignEvents.mutateAsync(templateEventsFormatted)
             navigate(`/campaign/${campaignId}`)
 
         })
@@ -158,6 +158,7 @@ function CreateCampaignForm(props: {
                         }
                         <DateTimePicker
                             {...register('targetDate')}
+                            //@ts-ignore
                             onChange={setTargetDate}
                             value={targetDate}
                         />

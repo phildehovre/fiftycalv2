@@ -1,7 +1,13 @@
 import React, { useState } from 'react'
 import { TemplateObj } from '../types/types'
 
-export const selectedTemplateContext = React.createContext({})
+export const selectedTemplateContext = React.createContext<SelectedTemplateInterface>({} as SelectedTemplateInterface)
+
+
+interface SelectedTemplateInterface {
+    selectedTemplateId: string | undefined
+    setSelectedTemplateId: (id: string) => void
+}
 
 function SelectedTemplateContextProvider(props: { children: React.ReactNode }) {
 
