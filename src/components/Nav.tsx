@@ -10,7 +10,7 @@ import CreateTemplatePage from '../pages/CreateTemplatePage'
 
 function Nav() {
 
-    const session: Session | null = useSession()
+    const session: any = useSession()
 
     return (
         <div className='nav-ctn'>

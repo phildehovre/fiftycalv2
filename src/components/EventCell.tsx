@@ -28,7 +28,7 @@ function EventCell(props: {
     const { register, handleSubmit, formState: { errors } } = useForm()
 
 
-    const cellRef: React.MutableRefObject<object | undefined> = useRef()
+    const cellRef: React.MutableRefObject<any> = useRef()
 
     useEffect(() => {
         window.addEventListener('click', (e) => {
@@ -49,7 +49,7 @@ function EventCell(props: {
         setEdit(true)
     }
 
-    const updateCellFn = async ({ id, key, val }) => {
+    const updateCellFn = async ({ id, key, val }: any) => {
         console.log(id, key, val)
         return await supabase
             .from('campaign_events')
@@ -58,7 +58,7 @@ function EventCell(props: {
     }
 
     const updateCell = useMutation({
-        mutationFn: ({ id, key, val }) => updateCellFn({ id, key, val }),
+        mutationFn: ({ id, key, val }: any) => updateCellFn({ id, key, val }),
     })
 
     const onSubmit = (formData: any) => {

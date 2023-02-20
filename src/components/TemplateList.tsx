@@ -14,25 +14,24 @@ function TemplateList() {
 
     const navigate = useNavigate()
 
-    const { setSelectedTemplateId } = useContext(selectedTemplateContext)
-
-    const { setSelectedCampaignId } = useContext(selectedCampaignContext)
+    const templateContext = useContext(selectedTemplateContext)
+    const campaignContext = useContext(selectedCampaignContext)
 
 
     const renderList = (data: any, type: string) => {
 
-        return data.map((e, i) => {
+        return data.map((e: any, i: number) => {
             return (
                 <div
                     className='template-btn'
                     key={i}
                     onClick={() => {
                         if (type === 'template') {
-                            setSelectedTemplateId(e.template_id)
+                            templateContext?.setSelectedTemplateId(e.template_id)
                             navigate(`/${type}/${e.template_id}`)
                         }
                         if (type === 'campaign') {
-                            setSelectedCampaignId(e.campaign_id)
+                            campaignContext?.setSelectedCampaignId(e.campaign_id)
                             navigate(`/${type}/${e.campaign_id}`)
                         }
                     }}

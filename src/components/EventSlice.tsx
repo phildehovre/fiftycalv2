@@ -4,7 +4,7 @@ import EventCell from './EventCell'
 import './EventSlice.scss'
 import { convertDaysToUnits } from '../utils/helpers'
 
-function EventSlice(props: { event: TaskObj }) {
+function EventSlice(props: { event: any }) {
 
     const { event } = props
 

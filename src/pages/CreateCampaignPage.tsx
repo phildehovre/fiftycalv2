@@ -10,13 +10,13 @@ function CreateCampaignPage() {
 
     const { data, isLoading, error } = useTemplates()
 
-    const { selectedTemplateId } = useContext(selectedTemplateContext)
+    const context = useContext<any>(selectedTemplateContext)
 
-    var { data: templateEventsData } = useTemplateEvents(selectedTemplateId)
+    var { data: templateEventsData } = useTemplateEvents(context?.selectedTemplateId)
 
     return (
         <Section>
-            {isLoading && !data && !selectedTemplateId
+            {isLoading && !data && !context?.selectedTemplateId
                 ? <Spinner />
                 : <CreateCampaignForm templates={data?.data} templateEvents={templateEventsData?.data} />
             }

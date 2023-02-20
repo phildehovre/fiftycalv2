@@ -1,4 +1,3 @@
-//@ts-nocheck
 
 import React, { useState, useEffect } from 'react'
 import './EditTemplate.scss'
@@ -14,8 +13,8 @@ function EditTemplateForm(props: {
     template: TemplateObj
 }) {
 
-    const [isCreatingTask, setIsCreatingTask] = useState(false)
-    const [indexOfEdited, setIndexOfEdited] = React.useState<number | null>(null)
+    const [isCreatingTask, setIsCreatingTask] = useState<any>(false)
+    const [indexOfEdited, setIndexOfEdited] = React.useState<any>(null)
 
     const { template } = props
 
@@ -23,12 +22,12 @@ function EditTemplateForm(props: {
         data: templateEventsData,
         isLoading: isTemplateEventsLoading,
         error: templateEventsError
-    } = useTemplateEvents(template.template_id)
+    }: any = useTemplateEvents(template.template_id)
 
 
     const renderTemplateEvents = () => {
-        let templatesSorted = templateEventsData?.data?.sort((a, b) => { return b.position - a.position })
-        return templatesSorted?.map((e, i) => {
+        let templatesSorted = templateEventsData?.data?.sort((a: any, b: any) => { return b.position - a.position })
+        return templatesSorted?.map((e: object, i: number) => {
             return (
                 <TaskSlice
                     task={e}

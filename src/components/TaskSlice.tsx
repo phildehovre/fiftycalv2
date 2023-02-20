@@ -13,97 +13,90 @@ import { useQueryClient } from '@tanstack/react-query'
 import { convertDaysToUnits } from '../utils/helpers'
 
 
-function TaskSlice(props: {
-    template?: TemplateObj,
-    type?: string,
-    task?: TaskObj,
-    taskIndex?: number,
-    indexOfEdited?: number | null,
-    setIndexOfEdited: (index: number | null) => number | null
-    setIsCreatingTask?: (bool: boolean) => void
-}) {
-    const {
-        template,
-        task,
-        taskIndex,
-        indexOfEdited,
-        setIndexOfEdited,
-        setIsCreatingTask
-    } = props
+function TaskSlice(props: any)
 
-    const [isHovered, setIsHovered] = React.useState(false)
+const {
+    template,
+    task,
+    taskIndex,
+    indexOfEdited,
+    setIndexOfEdited,
+    setIsCreatingTask
+} = props
 
-    const queryClient = useQueryClient()
+const [isHovered, setIsHovered] = React.useState(false)
 
-    const deleteTemplateEvent = useMutation({
-        mutationFn: async (task: TaskObj) => await supabase
-            .from('template_events')
-            .delete()
-            .eq('id', task.id)
-    });
+const queryClient = useQueryClient()
+
+const deleteTemplateEvent = useMutation({
+    mutationFn: async (task: TaskObj) => await supabase
+        .from('template_events')
+        .delete()
+        .eq('id', task.id)
+});
 
 
-    const handleDeleteTask = (task: TaskObj) => {
-        deleteTemplateEvent.mutateAsync(task).then((res) => {
-            queryClient.invalidateQueries({ queryKey: ['template_events'] })
-        }
-        )
+const handleDeleteTask = (task: TaskObj) => {
+    deleteTemplateEvent.mutateAsync(task).then((res) => {
+        queryClient.invalidateQueries({ queryKey: ['template_events'] })
     }
+    )
+}
 
-    const renderCreateTaskButton = () => {
-        if (props.type == 'edit') {
-            return (
-                <CreateTaskForm />
-            )
-        }
-        if (props.type == 'create') {
-            return (
-                <CreateTaskForm type='create' setIsCreatingTask={setIsCreatingTask} />
-            )
-        }
-        if (props.type == 'placeholder') {
-            return (
-                <Spinner />
-            )
-        }
-
-
-
+const renderCreateTaskButton = () => {
+    if (props.type == 'edit') {
         return (
-            <>
-                {indexOfEdited === taskIndex
-                    ? <CreateTaskForm type='edit' task={task} />
-                    : <div className='slice-ctn'
-                        onMouseEnter={() => setIsHovered(true)}
-                        onMouseLeave={() => setIsHovered(false)}
-                    >
-                        <div className='slice-cell' >{convertDaysToUnits(task?.position, task?.position_units)} {task?.position_units} before</div>
-                        <div className='slice-cell' >{task?.category}</div>
-                        <div className='slice-cell' >{task?.description}</div>
-                        <div className='slice-cell' >{task?.entity_responsible}</div>
-                        <div className='slice-cell' >{task?.type}</div>
-
-                        {isHovered &&
-                            <span className='edit_delete-ctn'>
-                                <button className='' ><FontAwesomeIcon icon={faTrash}
-                                    onClick={() => { handleDeleteTask(task) }}
-                                /></button>
-                                <button
-                                    onClick={() => { setIndexOfEdited(taskIndex) }}
-                                ><FontAwesomeIcon icon={faPencil} /></button>
-                            </span>
-                        }
-                    </div >
-                }
-            </>
+            <CreateTaskForm />
         )
     }
+    if (props.type == 'create') {
+        return (
+            <CreateTaskForm type='create' setIsCreatingTask={setIsCreatingTask} />
+        )
+    }
+    if (props.type == 'placeholder') {
+        return (
+            <Spinner />
+        )
+    }
+
+
 
     return (
         <>
-            {renderCreateTaskButton()}
+            {indexOfEdited === taskIndex
+                ? <CreateTaskForm type='edit' task={task} />
+                : <div className='slice-ctn'
+                    onMouseEnter={() => setIsHovered(true)}
+                    onMouseLeave={() => setIsHovered(false)}
+                >
+                    <div className='slice-cell' >{convertDaysToUnits(task?.position, task?.position_units)} {task?.position_units} before</div>
+                    <div className='slice-cell' >{task?.category}</div>
+                    <div className='slice-cell' >{task?.description}</div>
+                    <div className='slice-cell' >{task?.entity_responsible}</div>
+                    <div className='slice-cell' >{task?.type}</div>
+
+                    {isHovered &&
+                        <span className='edit_delete-ctn'>
+                            <button className='' ><FontAwesomeIcon icon={faTrash}
+                                onClick={() => { handleDeleteTask(task) }}
+                            /></button>
+                            <button
+                                onClick={() => { setIndexOfEdited(taskIndex) }}
+                            ><FontAwesomeIcon icon={faPencil} /></button>
+                        </span>
+                    }
+                </div >
+            }
         </>
     )
 }
+
+return (
+    <>
+        {renderCreateTaskButton()}
+    </>
+)
+
 
 export default TaskSlice

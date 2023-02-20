@@ -1,4 +1,3 @@
-import React, { useRef, useEffect } from 'react'
 import './ConfirmationModal.scss'
 
 function ConfirmationModal(props: {
@@ -9,7 +8,6 @@ function ConfirmationModal(props: {
 
 
     const {
-        showConfirmationModal,
         setShowConfirmationModal,
         callbackFn } = props
 

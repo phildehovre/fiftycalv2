@@ -26,15 +26,13 @@ const schema = yup.object().shape({
 
 function CreateCampaignForm(props: {
     templates: any,
-    templateEvents: TaskObj[]
+    templateEvents: any,
     task?: object
 }) {
     const { templates, templateEvents } = props
     const templateContext = useContext(selectedTemplateContext)
     const campaignContext = useContext(selectedCampaignContext)
 
-
-    console.log(campaignContext)
 
     useEffect(() => {
         if (templates && templateContext?.selectedTemplateId?.length === 0) {
@@ -171,10 +169,10 @@ function CreateCampaignForm(props: {
                 </div>
                 <div className='template_form-input-ctn'>
                     <label>Description:
-                        {/* {errors &&
+                        {errors.description &&
 
-                            <p className='form-error-msg'>{description?.message}</p>
-                        } */}
+                            <p className='form-error-msg'>Describe the end goal of this campaign</p>
+                        }
                     </label>
                     <input
                         {...register('description')}
