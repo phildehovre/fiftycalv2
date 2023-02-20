@@ -129,7 +129,7 @@ export async function postEvents(events: any[], targetDate: Date, session: any) 
                 formatAndPostEvent(events[i], targetDate, session).then(() => {
                     events = events.slice(i + 1, events.length - 1)
                 }).catch(err => alert(err))
-            }, 350)
+            }, 250)
         } else {
             formatAndPostEvent(events[i], targetDate, session).then(() => {
                 events = events.slice(i + 1, events.length - 1)
