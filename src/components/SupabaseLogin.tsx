@@ -25,10 +25,6 @@ function SupabaseLogin() {
         catch (error) {
             alert('Error logging in to Google with Supabase')
         }
-
-        finally {
-            navigate('/new-template')
-        }
     }
 
     return (
