@@ -3,7 +3,7 @@ import { useContext, useEffect } from 'react'
 import { useSession } from '@supabase/auth-helpers-react'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useForm } from 'react-hook-form'
+import { FieldError, FieldErrorsImpl, Merge, useForm } from 'react-hook-form'
 import { v4 as uuidv4 } from 'uuid'
 import { useMutation } from '@tanstack/react-query'
 import { supabase } from '../App'
@@ -11,7 +11,7 @@ import Spinner from './Spinner'
 import './CreateTemplateForm.scss'
 import { useNavigate } from 'react-router'
 import { selectedTemplateContext } from '../contexts/SelectedTemplateContext'
-import { selectedCampaignContext } from '../contexts/SelectedCampaignContext'
+import { selectedCampaignContext, SelectedCampaignType } from '../contexts/SelectedCampaignContext'
 import { TaskObj, TemplateObj } from '../types/types'
 import DateTimePicker from 'react-datetime-picker'
 import { formatTemplateEventsToCampaign } from '../utils/helpers'
@@ -27,23 +27,27 @@ const schema = yup.object().shape({
 function CreateCampaignForm(props: {
     templates: any,
     templateEvents: TaskObj[]
+    task?: object
 }) {
     const { templates, templateEvents } = props
-    const { selectedTemplateId, setSelectedTemplateId } = useContext(selectedTemplateContext)
-    const { selectedCampaignId, setSelectedCampaignId } = useContext(selectedCampaignContext)
+    const templateContext = useContext(selectedTemplateContext)
+    const campaignContext = useContext(selectedCampaignContext)
+
+
+    console.log(campaignContext)
 
     useEffect(() => {
-        if (templates && selectedTemplateId?.length === 0) {
-            setSelectedTemplateId(templates[0].template_id)
+        if (templates && templateContext?.selectedTemplateId?.length === 0) {
+            templateContext?.setSelectedTemplateId(templates[0].template_id)
         }
     });
 
     const { register, handleSubmit, formState: { errors } } = useForm({ resolver: yupResolver(schema) })
-    const [targetDate, setTargetDate] = React.useState()
+    const [targetDate, setTargetDate] = React.useState<Date>()
     const session = useSession()
     const navigate = useNavigate()
 
-    //@ts-ignore
+
 
 
     const addCampaign = useMutation({
@@ -54,7 +58,7 @@ function CreateCampaignForm(props: {
     });
 
 
-    const addDateToCampaign = (campaign: { targetDate: any, campaign_id: string }) => {
+    const addDateToCampaign = (campaign: any) => {
         campaign.targetDate = targetDate
         return campaign
     }
@@ -70,7 +74,7 @@ function CreateCampaignForm(props: {
 
     const onSubmit = (data: any) => {
         const { template, name, description } = data
-        setSelectedTemplateId(template)
+        templateContext?.setSelectedTemplateId(template)
         const campaignSansDate = {
             'name': name,
             'description': description,
@@ -79,7 +83,7 @@ function CreateCampaignForm(props: {
             'author_id': session?.user.id
         };
 
-        //@ts-ignore
+
         const campaign = addDateToCampaign(campaignSansDate)
 
         addCampaign.mutateAsync(campaign).then((res) => {
@@ -96,9 +100,9 @@ function CreateCampaignForm(props: {
 
         }).then((res: any) => {
             var campaignId = res.data[0].campaign_id
-            setSelectedCampaignId(campaignId)
+            campaignContext?.setSelectedCampaignId(campaignId)
             console.log(campaignId, 'does it happen here')
-            console.log(selectedCampaignId, 'ID from context')
+            console.log(campaignContext?.selectedCampaignId, 'ID from campaignContext')
             const templateEventsFormatted = formatTemplateEventsToCampaign(templateEvents, campaignId)
             copyTemplateEventsToCampaignEvents.mutateAsync(templateEventsFormatted)
             navigate(`/campaign/${campaignId}`)
@@ -114,9 +118,9 @@ function CreateCampaignForm(props: {
                 className='template_form-ctn'>
                 <div className='template_form-input-ctn'>
                     <label>Campaign Name:
-                        {errors &&
-                            //@ts-ignore
-                            <p className='form-error-msg'>{errors.name?.message}</p>
+                        {errors?.name &&
+
+                            <p className='form-error-msg'>'You must enter a valid name'</p>
                         }
                     </label>
                     <input
@@ -132,7 +136,7 @@ function CreateCampaignForm(props: {
                         {...register('template')}
                         name='template'
                         className='template_form-input'
-                        onChange={(e) => setSelectedTemplateId(e.target.value)}
+                        onChange={(e) => templateContext?.setSelectedTemplateId(e.target.value)}
                     >
                         {templates?.map((e: TemplateObj, i: number) => {
                             return (
@@ -147,19 +151,19 @@ function CreateCampaignForm(props: {
                 <div className='template_form-input-ctn'>
                     <label>End date:
                         {errors &&
-                            //@ts-ignore
-                            <p className='form-error-msg'>{errors.span?.message}</p>
+
+                            <p className='form-error-msg'>You must choose a duration</p>
                         }
                     </label>
                     <div className='template_form-input-ctn'>
-                        {errors &&
-                            //@ts-ignore
-                            <p className='form-error-msg'>{errors.date?.message}</p>
+                        {errors.date &&
+
+                            <p className='form-error-msg'>You must choose a target date</p>
                         }
                         <DateTimePicker
                             {...register('targetDate')}
-                            //@ts-ignore
-                            onChange={setTargetDate}
+
+                            onChange={(value) => setTargetDate(value)}
                             value={targetDate}
                         />
                     </div>
@@ -167,10 +171,10 @@ function CreateCampaignForm(props: {
                 </div>
                 <div className='template_form-input-ctn'>
                     <label>Description:
-                        {errors &&
-                            //@ts-ignore
-                            <p className='form-error-msg'>{errors.description?.message}</p>
-                        }
+                        {/* {errors &&
+
+                            <p className='form-error-msg'>{description?.message}</p>
+                        } */}
                     </label>
                     <input
                         {...register('description')}

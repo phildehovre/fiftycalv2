@@ -25,7 +25,7 @@ function Nav() {
                         <SupabaseSignOut />
                         <div className='user-icon'>
                             {
-                                //@ts-ignore
+
                                 session?.user.email[0].toUpperCase()
                             }</div>
                     </>

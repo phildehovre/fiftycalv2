@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 import React from 'react'
 import { TaskObj, TemplateObj } from '../types/types'
 import CreateTaskForm from './CreateTaskForm'
@@ -12,13 +14,13 @@ import { convertDaysToUnits } from '../utils/helpers'
 
 
 function TaskSlice(props: {
-    template: TemplateObj,
-    type: string,
-    task: TaskObj,
-    taskIndex: number,
-    indexOfEdited: number | undefined,
-    setIndexOfEdited: (index: number) => number
-    setIsCreatingTask: () => void
+    template?: TemplateObj,
+    type?: string,
+    task?: TaskObj,
+    taskIndex?: number,
+    indexOfEdited?: number | null,
+    setIndexOfEdited: (index: number | null) => number | null
+    setIsCreatingTask?: (bool: boolean) => void
 }) {
     const {
         template,

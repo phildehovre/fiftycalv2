@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 import React, { useState, useEffect } from 'react'
 import './EditTemplate.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -13,7 +15,7 @@ function EditTemplateForm(props: {
 }) {
 
     const [isCreatingTask, setIsCreatingTask] = useState(false)
-    const [indexOfEdited, setIndexOfEdited] = React.useState()
+    const [indexOfEdited, setIndexOfEdited] = React.useState<number | null>(null)
 
     const { template } = props
 
@@ -35,7 +37,6 @@ function EditTemplateForm(props: {
                     type={'data'}
                     taskIndex={i}
                     indexOfEdited={indexOfEdited}
-                    //@ts-ignore
                     setIndexOfEdited={setIndexOfEdited}
                 />
             )
@@ -47,21 +48,24 @@ function EditTemplateForm(props: {
         <>
             <div className='template_flex-ctn'>
                 <>{
-                    //@ts-ignore
+
                     templateEventsData?.data.length === 0 && !isCreatingTask &&
                     <h4>Add the first task</h4>
                 }
                     {
                         isTemplateEventsLoading
-                            //@ts-ignore
-                            ? <TaskSlice task={undefined} task={templateEventsData?.data[indexOfEdited]} template={template} type='placeholder' />
+
+                            ? <TaskSlice
+                                task={templateEventsData?.data[indexOfEdited]}
+                                template={template}
+                                type='placeholder' />
                             : renderTemplateEvents()
                     }
                     {
                         isCreatingTask
                             ? <TaskSlice template={template} type='create'
                                 setIscreatingTask={setIsCreatingTask}
-                                //@ts-ignore
+
                                 setIndexOfEdited={setIndexOfEdited}
                             />
                             : <div className='add_task-btn'

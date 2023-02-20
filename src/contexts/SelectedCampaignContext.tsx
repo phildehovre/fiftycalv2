@@ -1,22 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import { CampaignObj } from '../types/types'
 
-export const selectedCampaignContext = React.createContext({} as SelectedCampaignInterface)
+export const selectedCampaignContext = React.createContext<SelectedCampaignType | undefined>(undefined)
 
-interface SelectedCampaignInterface {
-    selectedCampaignId: string
-    setSelectedCampaignId: (id: string | undefined) => void
+export type SelectedCampaignType = {
+    selectedCampaignId: string | undefined
+    setSelectedCampaignId: React.Dispatch<React.SetStateAction<string | undefined>>
 }
 
 function SelectedCampaignContextProvider(props: { children: React.ReactNode }) {
 
-    const [selectedCampaignId, setSelectedCampaignId] = useState('')
+    const [selectedCampaignId, setSelectedCampaignId] = useState<string | undefined>(undefined)
 
-    const values = { selectedCampaignId, setSelectedCampaignId }
 
     return (
         <selectedCampaignContext.Provider
-            value={values}
+            value={{ selectedCampaignId, setSelectedCampaignId }}
         >
             {props.children}
         </selectedCampaignContext.Provider>

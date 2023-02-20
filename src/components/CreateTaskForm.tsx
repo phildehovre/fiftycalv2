@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 import React, { useContext } from 'react'
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
 import * as yup from 'yup'
@@ -26,9 +28,10 @@ const schema = yup.object().shape({
 })
 
 function CreateTaskForm(props: {
-    task: TaskObj | undefined,
+    task: object | undefined,
     type: 'edit' | 'create',
-    indexOfEdited: () => void,
+    indexOfEdited: number | null
+    setIndexOfEdited: (index: number) => number,
     setIsCreatingTask: () => void
 }) {
 
@@ -37,8 +40,8 @@ function CreateTaskForm(props: {
     const { register, handleSubmit, formState: { errors } } = useForm({ resolver: yupResolver(schema) })
     const queryClient = useQueryClient()
 
-    //@ts-ignore
-    const { selectedTemplateId } = useContext(selectedTemplateContext)
+
+    const context = useContext(selectedTemplateContext)
 
     const session = useSession()
     const navigate = useNavigate()
@@ -59,7 +62,7 @@ function CreateTaskForm(props: {
     });
 
     const deleteTemplateEvent = useMutation({
-        mutationFn: async (task: TaskObj) => await supabase
+        mutationFn: async (task: any) => await supabase
             .from('template_events')
             .delete()
             .eq('id', task.id)
@@ -75,12 +78,12 @@ function CreateTaskForm(props: {
             'description': description,
             'entity_responsible': entity_responsible,
             'type': type,
-            'template_id': selectedTemplateId,
+            'template_id': context?.selectedTemplateId,
             'author_id': session?.user.id,
         };
 
         if (props.type === 'edit') {
-            //@ts-ignore
+
             deleteTemplateEvent.mutateAsync(task).then((res) => {
                 queryClient.invalidateQueries({ queryKey: ['template_events'] })
             }
@@ -90,10 +93,10 @@ function CreateTaskForm(props: {
                 .catch(err => { console.log(err) })
                 .then((res) => {
                     queryClient.invalidateQueries({ queryKey: ['template_events'] });
-                    //@ts-ignore
+
                     () => setIsCreatingTask(false)
-                    //@ts-ignore
-                    setIndexOfEdited(undefined)
+
+                    setIndexOfEdited(null)
                 })
             return
         }

@@ -33,7 +33,7 @@ function EventCell(props: {
     useEffect(() => {
         window.addEventListener('click', (e) => {
             try {
-                //@ts-ignore
+
                 if (cellRef.current !== null && !cellRef.current.contains(e.target)) {
                     setEdit(false)
                 }

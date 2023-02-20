@@ -22,24 +22,22 @@ function EditCampaignForm() {
     const params = useParams()
     const location = useLocation()
 
-    //@ts-ignore
-    const { selectedCampaignId, setSelectedCampaignId } = useContext(selectedCampaignContext)
+    const context = useContext(selectedCampaignContext)
 
     useEffect(() => {
-        if (!selectedCampaignId) {
-            setSelectedCampaignId(params.id)
+        if (!context?.selectedCampaignId) {
+            context?.setSelectedCampaignId(params.id)
         }
     }, [])
 
 
-    const { data: campaignData, isLoading: isCampaignLoading, error: campaignError } = useCampaign(selectedCampaignId)
-    const { data: campaignEventsData, isLoading: isCampaignEventsLoading, error: campaignEventsError } = useCampaignEvents(selectedCampaignId)
+    const { data: campaignData, isLoading: isCampaignLoading, error: campaignError } = useCampaign(context?.selectedCampaignId)
+    const { data: campaignEventsData, isLoading: isCampaignEventsLoading, error: campaignEventsError } = useCampaignEvents(context?.selectedCampaignId)
 
     console.log(campaignData?.data)
 
     const renderTemplateEvents = () => {
-        //@ts-ignore
-        let templateEventsSorted = campaignEventsData?.data.sort((a, b) => { return b.position - a.position })
+        let templateEventsSorted = campaignEventsData?.data?.sort((a, b) => { return b.position - a.position })
         return templateEventsSorted?.map((e: TaskObj, i: number) => {
             return (
                 <EventSlice

@@ -31,7 +31,7 @@ function CreateEventForm() {
     const session = useSession()
     const navigate = useNavigate()
 
-    //@ts-ignore
+
     const { setSelectedTemplateId } = useContext(selectedTemplateContext)
 
     const addTemplate = useMutation({
@@ -69,7 +69,7 @@ function CreateEventForm() {
                 <div className='template_form-input-ctn'>
                     <label>Duration (in days):
                         {errors &&
-                            //@ts-ignore
+
                             <p className='form-error-msg'>{errors.span?.message}</p>
                         }
                     </label>
@@ -87,7 +87,7 @@ function CreateEventForm() {
                     <label>Name:
 
                         {errors &&
-                            //@ts-ignore
+
                             <p className='form-error-msg'>{errors.name?.message}</p>
                         }
                     </label>
@@ -102,7 +102,7 @@ function CreateEventForm() {
                 <div className='template_form-input-ctn'>
                     <label>Description:
                         {errors &&
-                            //@ts-ignore
+
                             <p className='form-error-msg'>{errors.description?.message}</p>
                         }
                     </label>

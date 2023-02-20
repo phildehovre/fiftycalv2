@@ -13,14 +13,14 @@ function TemplateList() {
     const { data: campaignsData, isLoading: isCampaignsLoading, error: campaignsError } = useCampaigns()
 
     const navigate = useNavigate()
-    //@ts-ignore
+
     const { setSelectedTemplateId } = useContext(selectedTemplateContext)
-    //@ts-ignore
+
     const { setSelectedCampaignId } = useContext(selectedCampaignContext)
 
 
     const renderList = (data: any, type: string) => {
-        //@ts-ignore
+
         return data.map((e, i) => {
             return (
                 <div
