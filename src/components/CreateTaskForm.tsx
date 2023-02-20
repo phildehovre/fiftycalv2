@@ -33,7 +33,7 @@ function CreateTaskForm(props: {
 }) {
 
 
-    const { task, setIsCreatingTask, setIndexOfEdited } = props
+    const { task, setIsCreatingTask } = props
     const { register, handleSubmit, formState: { errors } } = useForm({ resolver: yupResolver(schema) })
     const queryClient = useQueryClient()
 
@@ -66,6 +66,7 @@ function CreateTaskForm(props: {
     });
 
     const onSubmit = (data: any) => {
+        console.log(data)
         const { position, type, category, entity_responsible, description, position_units } = data
         const event = {
             'position': convertPositionToDays(position, position_units),
@@ -79,6 +80,7 @@ function CreateTaskForm(props: {
         };
 
         if (props.type === 'edit') {
+            //@ts-ignore
             deleteTemplateEvent.mutateAsync(task).then((res) => {
                 queryClient.invalidateQueries({ queryKey: ['template_events'] })
             }
@@ -88,7 +90,9 @@ function CreateTaskForm(props: {
                 .catch(err => { console.log(err) })
                 .then((res) => {
                     queryClient.invalidateQueries({ queryKey: ['template_events'] });
+                    //@ts-ignore
                     () => setIsCreatingTask(false)
+                    //@ts-ignore
                     setIndexOfEdited(undefined)
                 })
             return
@@ -97,8 +101,6 @@ function CreateTaskForm(props: {
             queryClient.invalidateQueries({ queryKey: ['template_events'] })
         }).catch(err => console.log(err))
     };
-
-
 
     return (
         <div>
@@ -138,14 +140,15 @@ function CreateTaskForm(props: {
                     </input>
                 </div>
 
-                <div className='task_form-input-ctn'>
-                    <input
+                <div className='task_form-input-ctn textarea'>
+                    <textarea
                         {...register('description')}
                         name='description'
-                        type='text' placeholder='Task description'
+                        wrap='hard'
+                        placeholder='Task description'
                         className={`task_form-input ${errors.description ? 'error' : ''}`}
                         defaultValue={task?.description}
-                    ></input>
+                    ></textarea>
                 </div>
                 <div className='task_form-input-ctn'>
                     <select

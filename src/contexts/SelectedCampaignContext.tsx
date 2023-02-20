@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { CampaignObj } from '../types/types'
 
 export const selectedCampaignContext = React.createContext({})
@@ -6,8 +6,6 @@ export const selectedCampaignContext = React.createContext({})
 function SelectedCampaignContextProvider(props: { children: React.ReactNode }) {
 
     const [selectedCampaignId, setSelectedCampaignId] = useState<string>('')
-
-    // console.log(selectedCampaignId)
 
     const values = { selectedCampaignId, setSelectedCampaignId }
 

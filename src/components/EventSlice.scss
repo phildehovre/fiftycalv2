@@ -1,7 +1,7 @@
 .event_slice-ctn {
     position: relative;
     display: flex;
-    width: 90vw;
+    width: var(--section-size);
     justify-content: space-between;
 
     &>span {

@@ -1,0 +1,9 @@
+@use "sass:map";
+
+$theme-colors: (
+    "primary": hsl(0, 0%, 15%),
+    "secondary": #454545,
+    "tertiary": #707070,
+    "accent": hsl(29, 100%, 50%),
+    "text-white": white
+);

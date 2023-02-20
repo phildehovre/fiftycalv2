@@ -1,7 +1,7 @@
 .modal-ctn {
     height: clamp(250px, 150px, 50vh);
     width: clamp(350px, 350px, 75vw);
-    background-color: rgb(34, 34, 34);
+    background-color: var(--secondary);
     border-radius: 16px;
     display: flex;
     flex-direction: column;

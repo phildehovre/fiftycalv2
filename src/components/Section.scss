@@ -3,5 +3,6 @@
     justify-content: center;
     place-content: center;
     align-items: flex-start;
-    padding: 1em
+    height: 100vh;
+    width: var(--page-size);
 }

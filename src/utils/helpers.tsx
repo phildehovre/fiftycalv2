@@ -26,8 +26,7 @@ export function convertPositionToDays(position: number, unit: string) {
 }
 
 export function formatTemplateEventsToCampaign(templateEvents: TaskObj[], campaignId: string) {
-
-    console.log(campaignId, '  checking inside helper function')
+    console.log(templateEvents)
     const newArray = templateEvents.map((t) => {
         const {
             position,

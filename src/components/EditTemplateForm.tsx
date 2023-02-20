@@ -46,7 +46,11 @@ function EditTemplateForm(props: {
     return (
         <>
             <div className='template_flex-ctn'>
-                <>
+                <>{
+                    //@ts-ignore
+                    templateEventsData?.data.length === 0 && !isCreatingTask &&
+                    <h4>Add the first task</h4>
+                }
                     {
                         isTemplateEventsLoading
                             //@ts-ignore
@@ -62,7 +66,7 @@ function EditTemplateForm(props: {
                             />
                             : <div className='add_task-btn'
                                 onClick={() => setIsCreatingTask(true)}
-                            >New task<span><FontAwesomeIcon icon={faPlusCircle} size={'xl'} /></span></div>
+                            >Add task<span><FontAwesomeIcon icon={faPlusCircle} size={'xl'} /></span></div>
                     }
                 </>
             </div>

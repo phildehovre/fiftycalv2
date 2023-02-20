@@ -4,6 +4,7 @@ import { useParams } from 'react-router'
 import { useTemplate } from '../util/db'
 import Spinner from '../components/Spinner'
 import EditTemplateForm from '../components/EditTemplateForm'
+import Section from '../components/Section'
 
 function EditSelectedTemplatePage() {
 
@@ -24,13 +25,13 @@ function EditSelectedTemplatePage() {
 
 
     return (
-        <div>
+        <Section>
             <h2>{templateData?.data.name}</h2>
             {isTemplateLoading && !templateData
                 ? <Spinner />
                 : <EditTemplateForm template={templateData?.data} />
             }
-        </div>
+        </Section>
 
     )
 }

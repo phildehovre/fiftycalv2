@@ -1,17 +1,15 @@
 import React from 'react'
 import EditCampaignForm from '../components/EditCampaignForm'
+import Section from '../components/Section'
 import { useTemplate } from '../util/db'
 
 function EditCampaignPage() {
 
 
-
-    const { data, isLoading, error } = useTemplate()
-
     return (
-        <div>EditCampaignPage
+        <Section>
             <EditCampaignForm />
-        </div>
+        </Section>
     )
 }
 

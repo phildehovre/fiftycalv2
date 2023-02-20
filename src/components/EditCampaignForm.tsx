@@ -11,6 +11,8 @@ import { selectedCampaignContext } from '../contexts/SelectedCampaignContext'
 import EventSlice from './EventSlice'
 import SubmitCampaignButton from './SubmitCampaignButton'
 import dayjs from 'dayjs'
+import Spinner from './Spinner'
+import Section from './Section'
 
 
 
@@ -20,7 +22,7 @@ function EditCampaignForm() {
     const params = useParams()
     const location = useLocation()
 
-    const { selectedTemplateId } = useContext(selectedTemplateContext)
+    //@ts-ignore
     const { selectedCampaignId, setSelectedCampaignId } = useContext(selectedCampaignContext)
 
     useEffect(() => {
@@ -30,16 +32,13 @@ function EditCampaignForm() {
     }, [])
 
 
-    let templateId = selectedTemplateId || sessionStorage.getItem('template_id')
-    let campaignId = selectedCampaignId || params.id
+    const { data: campaignData, isLoading: isCampaignLoading, error: campaignError } = useCampaign(selectedCampaignId)
+    const { data: campaignEventsData, isLoading: isCampaignEventsLoading, error: campaignEventsError } = useCampaignEvents(selectedCampaignId)
 
-    const { data: campaignData, isLoading: isCampaignLoading, error: campaignError } = useCampaign(campaignId)
-    const { data: campaignEventsData, isLoading: isCampaignEventsLoading, error: campaignEventsError } = useCampaignEvents(campaignId)
-    const { data: templateEventsData, isLoading: isTemplateEventsLoading, error: templateEventsError } = useTemplateEvents(templateId)
-    const { data: templateData, isLoading: isTemplateLoading, error: templateError } = useTemplate(templateId)
-
+    console.log(campaignData?.data)
 
     const renderTemplateEvents = () => {
+        //@ts-ignore
         let templateEventsSorted = campaignEventsData?.data.sort((a, b) => { return b.position - a.position })
         return templateEventsSorted?.map((e: TaskObj, i: number) => {
             return (
@@ -52,12 +51,20 @@ function EditCampaignForm() {
     }
 
     return (
-        <>
+        <Section>
             <div className='campaign_flex-ctn'>
-                {renderTemplateEvents()}
-                <SubmitCampaignButton targetDate={campaignData?.data.targetDate} events={campaignEventsData?.data} />
+                {!isCampaignLoading && campaignData?.data
+                    ? <h4>{campaignData?.data.name}</h4>
+                    : <Spinner />
+                }
+                {!isCampaignLoading && campaignData?.data && campaignEventsData?.data &&
+                    <>
+                        {renderTemplateEvents()}
+                        <SubmitCampaignButton targetDate={campaignData?.data.targetDate} events={campaignEventsData?.data} />
+                    </>
+                }
             </div>
-        </>
+        </Section>
     )
 }
 

@@ -6,6 +6,7 @@ import { createClient } from '@supabase/supabase-js'
 // import { SessionContextProvider } from '@supabase/'
 import { SessionContextProvider } from '@supabase/auth-helpers-react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import './global.scss'
 
 const supabase = createClient(
   import.meta.env.VITE_REACT_APP_SUPABASE_PROJECT_URL,

@@ -1,6 +1,6 @@
 .task_form-ctn {
     display: flex;
-    width: 90vw;
+    max-width: 75vw;
     margin-top: 1em;
 }
 
@@ -10,8 +10,13 @@
     &>span {
         display: flex;
     }
-}
 
+    &>textarea {
+        max-width: auto;
+        min-width: auto;
+        height: 1.3em
+    }
+}
 
 .task_form-input {
     padding: 1em;
@@ -26,7 +31,7 @@
 .slice-ctn {
     position: relative;
     display: flex;
-    width: 90vw;
+    width: 75vw;
     justify-content: space-between;
 
     &>span {
@@ -53,6 +58,6 @@
 
 .submit-btn {
     position: absolute;
-    right: 4%;
+    right: 0;
     transform: translateY(3px);
 }

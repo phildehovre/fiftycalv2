@@ -4,17 +4,19 @@ import { useTemplates, useCampaigns } from '../util/db'
 import './TemplateList.scss'
 import { selectedTemplateContext } from '../contexts/SelectedTemplateContext'
 import { TemplateObj } from '../types/types'
+import { selectedCampaignContext } from '../contexts/SelectedCampaignContext'
 
 function TemplateList() {
 
 
-
-    const { data: templatesData, isTemplatesLoading, templatesError } = useTemplates()
-    const { data: campaignsData, isCampaignsLoading, campaignsError } = useCampaigns()
+    const { data: templatesData, isLoading: isTemplatesLoading, error: templatesError } = useTemplates()
+    const { data: campaignsData, isLoading: isCampaignsLoading, error: campaignsError } = useCampaigns()
 
     const navigate = useNavigate()
     //@ts-ignore
     const { setSelectedTemplateId } = useContext(selectedTemplateContext)
+    //@ts-ignore
+    const { setSelectedCampaignId } = useContext(selectedCampaignContext)
 
 
     const renderList = (data: any, type: string) => {
@@ -30,7 +32,7 @@ function TemplateList() {
                             navigate(`/${type}/${e.template_id}`)
                         }
                         if (type === 'campaign') {
-                            setSelectedTemplateId(e.template_id)
+                            setSelectedCampaignId(e.campaign_id)
                             navigate(`/${type}/${e.campaign_id}`)
                         }
                     }}
@@ -42,13 +44,13 @@ function TemplateList() {
 
     return (
         <div className='template_list-ctn'>
-            <h3 style={{ borderBottom: '1px solid darkgrey' }}>Templates</h3>
+            <h3 >Templates</h3>
             {!isTemplatesLoading && templatesData &&
                 <>
                     {renderList(templatesData.data, 'template')}
                 </>
             }
-            <h3 style={{ borderBottom: '1px solid darkgrey' }}>Campaigns</h3>
+            <h3 >Campaigns</h3>
             {
                 !isCampaignsLoading && campaignsData &&
                 <>
