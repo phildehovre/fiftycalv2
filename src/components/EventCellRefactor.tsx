@@ -11,14 +11,16 @@ function EventCellRefactor(props: {
     units?: string | undefined,
     eventId: string,
     type: string,
-    eventKey: string
+    eventKey: string,
+    dataTable: string
 }) {
 
     const {
         value,
         eventId,
         type,
-        eventKey
+        eventKey,
+        dataTable
     } = props
 
     const [edit, setEdit] = React.useState(false)
@@ -52,7 +54,7 @@ function EventCellRefactor(props: {
     const updateCellFn = async ({ id, key, val }: any) => {
         console.log(id, key, val)
         return await supabase
-            .from('campaign_events')
+            .from(dataTable)
             .update({ [key]: val })
             .eq('id', id)
     }
@@ -67,7 +69,7 @@ function EventCellRefactor(props: {
         let key = keys[0]
         let value = formData[key]
         updateCell.mutateAsync({ id: eventId, key: key, val: value }).then((res) => {
-            queryClient.invalidateQueries({ queryKey: ['campaign_events'] })
+            queryClient.invalidateQueries({ queryKey: [dataTable] })
         }
         )
     }

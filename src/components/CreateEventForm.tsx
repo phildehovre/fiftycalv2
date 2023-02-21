@@ -21,6 +21,8 @@ const schema = yup.object().shape({
 
 function CreateEventForm() {
 
+    console.log('is this still relevant')
+
 
     const [start, setStart] = useState(new Date())
     const [end, setEnd] = useState(new Date())

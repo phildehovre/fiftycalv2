@@ -28,7 +28,32 @@
 
 .slice-cell-btn {
     position: absolute;
+    height: 2em;
+    width: 1em;
     right: 5px;
     top: 50%;
-    transform: translateY(-50%)
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &:hover {
+        border: 1px solid var(--tertiary)
+    }
+}
+
+.edit_delete-ctn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    right: -40px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 10px;
+    outline: none;
+
+    &:hover {
+        border: 2px solid red;
+    }
 }
