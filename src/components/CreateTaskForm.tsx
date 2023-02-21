@@ -10,7 +10,7 @@ import { supabase } from '../App'
 import Spinner from './Spinner'
 import './CreateTemplateForm.scss'
 import './TaskSlice.scss'
-import { useNavigate } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlusSquare } from '@fortawesome/free-solid-svg-icons'
 import { TaskObj, TemplateObj } from '../types/types'
@@ -31,7 +31,7 @@ function CreateTaskForm(props: {
     task: object | undefined,
     type: 'edit' | 'create',
     indexOfEdited: number | null
-    setIndexOfEdited: (index: number) => number,
+    setIndexOfEdited: (index: number | null) => number,
     setIsCreatingTask: () => void
 }) {
 
@@ -42,9 +42,8 @@ function CreateTaskForm(props: {
 
 
     const context = useContext(selectedTemplateContext)
-
+    const params = useParams()
     const session = useSession()
-    const navigate = useNavigate()
 
     const addTemplateEvent = useMutation({
         mutationFn: async (event: any) => await supabase
@@ -68,8 +67,7 @@ function CreateTaskForm(props: {
             .eq('id', task.id)
     });
 
-    const onSubmit = (data: any) => {
-        console.log(data)
+    function onSubmit(data: any) {
         const { position, type, category, entity_responsible, description, position_units } = data
         const event = {
             'position': convertPositionToDays(position, position_units),
@@ -78,7 +76,7 @@ function CreateTaskForm(props: {
             'description': description,
             'entity_responsible': entity_responsible,
             'type': type,
-            'template_id': context?.selectedTemplateId,
+            'template_id': context?.selectedTemplateId || params.id,
             'author_id': session?.user.id,
         };
 
@@ -93,10 +91,9 @@ function CreateTaskForm(props: {
                 .catch(err => { console.log(err) })
                 .then((res) => {
                     queryClient.invalidateQueries({ queryKey: ['template_events'] });
-
-                    () => setIsCreatingTask(false)
-
-                    setIndexOfEdited(null)
+                }).then(() => {
+                    // props.setIsCreatingTask(false)
+                    // props.setIndexOfEdited(null)
                 })
             return
         }
@@ -144,14 +141,14 @@ function CreateTaskForm(props: {
                 </div>
 
                 <div className='task_form-input-ctn textarea'>
-                    <textarea
+                    <input type='text'
                         {...register('description')}
                         name='description'
                         wrap='hard'
                         placeholder='Task description'
                         className={`task_form-input ${errors.description ? 'error' : ''}`}
                         defaultValue={task?.description}
-                    ></textarea>
+                    ></input>
                 </div>
                 <div className='task_form-input-ctn'>
                     <select
@@ -182,7 +179,7 @@ function CreateTaskForm(props: {
                         <option value='announcement'>Announcement</option>
                     </select>
                 </div>
-                <button className='submit-btn' type='submit'>{addTemplateEvent.isLoading ? <Spinner /> : <FontAwesomeIcon icon={faPlusSquare} />}</button>
+                <button className='submit-btn' type='submit'>{addTemplateEvent.isLoading || updateTemplateEvent.isLoading ? <Spinner /> : <FontAwesomeIcon icon={faPlusSquare} />}</button>
             </form>
         </div >
     )

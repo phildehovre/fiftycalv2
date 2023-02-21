@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '../App'
 
-function EventCell(props: {
+function EventCellRefactor(props: {
     value: string | number | undefined
     units?: string | undefined,
     eventId: string,
@@ -98,4 +98,4 @@ function EventCell(props: {
     )
 }
 
-export default EventCell
+export default EventCellRefactor

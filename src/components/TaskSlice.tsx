@@ -24,6 +24,8 @@ function TaskSlice(props: any) {
         setIsCreatingTask
     } = props
 
+
+
     const [isHovered, setIsHovered] = React.useState(false)
 
     const queryClient = useQueryClient()
@@ -46,7 +48,7 @@ function TaskSlice(props: any) {
     const renderCreateTaskButton = () => {
         if (props.type == 'edit') {
             return (
-                <CreateTaskForm />
+                <CreateTaskForm setIndexOfEdited={setIndexOfEdited} />
             )
         }
         if (props.type == 'create') {

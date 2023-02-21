@@ -37,6 +37,7 @@ function EditTemplateForm(props: {
                     taskIndex={i}
                     indexOfEdited={indexOfEdited}
                     setIndexOfEdited={setIndexOfEdited}
+                    setIscreatingTask={setIsCreatingTask}
                 />
             )
         })
@@ -64,7 +65,6 @@ function EditTemplateForm(props: {
                         isCreatingTask
                             ? <TaskSlice template={template} type='create'
                                 setIscreatingTask={setIsCreatingTask}
-
                                 setIndexOfEdited={setIndexOfEdited}
                             />
                             : <div className='add_task-btn'
