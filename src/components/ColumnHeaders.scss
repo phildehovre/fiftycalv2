@@ -1,0 +1,13 @@
+.headers-ctn {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1em;
+}
+
+.header {
+    text-transform: capitalize;
+    font-size: 1.5em;
+    text-align: left;
+    display: flex;
+    width: 100%
+}

@@ -1,0 +1,31 @@
+.select-ctn {
+    position: relative;
+}
+
+.option {
+    cursor: pointer;
+    padding: .5em;
+
+}
+
+.autocomplete {
+    position: absolute;
+    color: grey;
+    top: 12px;
+    left: 15px;
+    display: flex;
+    font-size: .85em;
+
+    &:nth-child(2) {
+        color: grey;
+    }
+}
+
+.invisible {
+    opacity: 0;
+}
+
+.option-label {
+    background-color: yellow;
+    height: 10em;
+}

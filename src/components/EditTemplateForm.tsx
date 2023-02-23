@@ -6,6 +6,7 @@ import { faPlusCircle } from '@fortawesome/free-solid-svg-icons'
 import TaskSlice from './TaskSlice'
 import { TaskObj, TemplateObj } from '../types/types'
 import { useTemplateEvents } from '../util/db'
+import ColumnHeaders from './ColumnHeaders'
 
 
 
@@ -46,6 +47,7 @@ function EditTemplateForm(props: {
 
     return (
         <>
+            <ColumnHeaders headers={Object.keys(templateEventsData.data[0])} />
             <div className='template_flex-ctn'>
                 <>{
 

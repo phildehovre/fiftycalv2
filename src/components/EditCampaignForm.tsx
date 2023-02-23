@@ -1,21 +1,14 @@
 import React, { useState, useEffect, useContext } from 'react'
 import './EditTemplate.scss'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlusCircle } from '@fortawesome/free-solid-svg-icons'
-import TaskSlice from './TaskSlice'
-import { TaskObj, TemplateObj } from '../types/types'
-import { useCampaign, useTemplateEvents, useTemplate, useCampaignEvents } from '../util/db'
-import { useParams, useLocation, useMatch } from 'react-router'
-import { selectedTemplateContext } from '../contexts/SelectedTemplateContext'
+import { TaskObj } from '../types/types'
+import { useCampaign, useCampaignEvents } from '../util/db'
+import { useParams, useLocation, } from 'react-router'
 import { selectedCampaignContext } from '../contexts/SelectedCampaignContext'
 import EventSlice from './EventSlice'
 import SubmitCampaignButton from './SubmitCampaignButton'
-import dayjs from 'dayjs'
 import Spinner from './Spinner'
 import Section from './Section'
-
-
-
+import ColumnHeaders from './ColumnHeaders'
 
 function EditCampaignForm() {
 
@@ -51,6 +44,7 @@ function EditCampaignForm() {
     return (
         <Section>
             <div className='campaign_flex-ctn'>
+                <ColumnHeaders />
                 {!isCampaignLoading && campaignData?.data
                     ? <h4>{campaignData?.data.name}</h4>
                     : <Spinner />

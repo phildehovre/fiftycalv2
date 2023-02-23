@@ -15,6 +15,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlusSquare } from '@fortawesome/free-solid-svg-icons'
 import { selectedTemplateContext } from '../contexts/SelectedTemplateContext'
 import { convertPositionToDays } from '../utils/helpers'
+import Select from './Select'
+import { entityOptions, typeOptions } from '../assets/selectOptions'
 
 
 const schema = yup.object().shape({
@@ -40,6 +42,7 @@ function CreateTaskFormRefactor(props: {
     const params = useParams()
     const session = useSession()
 
+
     const addTemplateEvent = useMutation({
         mutationFn: async (event: any) => await supabase
             .from('template_events')
@@ -48,7 +51,9 @@ function CreateTaskFormRefactor(props: {
     });
 
 
+
     function onSubmit(data: any) {
+        console.log(data)
         const { position, type, category, entity_responsible, description, position_units } = data
         const event = {
             'position': convertPositionToDays(position, position_units),
@@ -124,19 +129,10 @@ function CreateTaskFormRefactor(props: {
                         <option value='artist-bedmar'>Artist & Bedmar</option>
                         <option value='artist'>Artist</option>
                     </select>
+                    {/* <Select options={entityOptions} register={register} /> */}
                 </div>
                 <div className='task_form-input-ctn'>
-                    <select
-                        {...register('type')}
-                        name='type'
-                        className='task_form-input'
-                    >
-                        <option value='action'>Action</option>
-                        <option value='creative'>Creative</option>
-                        <option value='pr-radio'>PR + Radio</option>
-                        <option value='promotion'>Promotion</option>
-                        <option value='announcement'>Announcement</option>
-                    </select>
+                    <Select options={typeOptions} register={register} />
                 </div>
                 <button className='submit-btn' type='submit'>{addTemplateEvent.isLoading ? <Spinner /> : <FontAwesomeIcon icon={faPlusSquare} />}</button>
             </form>

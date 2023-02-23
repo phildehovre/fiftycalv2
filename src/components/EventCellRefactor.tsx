@@ -5,6 +5,7 @@ import './EventSlice.scss'
 import { useForm } from 'react-hook-form'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '../App'
+import { entityOptions, typeOptions } from '../assets/selectOptions'
 
 function EventCellRefactor(props: {
     value: string | number | undefined
@@ -46,6 +47,23 @@ function EventCellRefactor(props: {
         })
     }, [])
 
+    const styles: any = () => {
+        if (eventKey === 'entity_responsible') {
+            let match: { type: string, color: string } | undefined = entityOptions.find((option, i) => {
+                return option.type == value
+            })
+
+            return { backgroundColor: match?.color }
+        }
+        if (eventKey === 'type') {
+            let match: { type: string, color: string } | undefined = typeOptions.find((option, i) => {
+                return option.type == value
+            })
+
+            return { backgroundColor: match?.color }
+        }
+    }
+
 
     const handleCellClick = () => {
         setEdit(true)
@@ -79,7 +97,8 @@ function EventCellRefactor(props: {
             <form onSubmit={handleSubmit(onSubmit)} ref={cellRef}
                 onMouseEnter={() => { setIsHovered(true) }}
                 onMouseLeave={() => { setIsHovered(false) }}
-                className={`slice-cell`}>
+                className={`slice-cell`}
+                style={styles()}>
                 {
                     isHovered &&
                     <button className='slice-cell-btn' onClick={() => { handleCellClick() }}><FontAwesomeIcon icon={faPencil} /></button>
@@ -95,7 +114,7 @@ function EventCellRefactor(props: {
                             defaultValue={value}></input>
                         : <div>{value}</div>
                 }
-            </form>
+            </form >
         </>
     )
 }

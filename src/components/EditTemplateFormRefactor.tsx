@@ -11,6 +11,7 @@ import EventSliceRefactor from './EventSliceRefactor'
 import Spinner from './Spinner'
 import CreateTaskForm from './CreateTaskForm'
 import CreateTaskFormRefactor from './CreateTaskFormRefactor'
+import ColumnHeaders from './ColumnHeaders'
 
 
 
@@ -53,6 +54,7 @@ function EditTemplateFormRefactor(props: {
                 }
                 {!isTemplateEventsLoading && templateEventsData?.data && template &&
                     <>
+                        <ColumnHeaders headers={Object.keys(templateEventsData?.data[0])} />
                         {renderTemplateEvents(templateEventsData)}
                         {/* <SubmitCampaignButton targetDate={campaignData?.data.targetDate} events={events?.data} /> */}
                     </>

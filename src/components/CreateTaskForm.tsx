@@ -16,6 +16,7 @@ import { faPlusSquare } from '@fortawesome/free-solid-svg-icons'
 import { TaskObj, TemplateObj } from '../types/types'
 import { selectedTemplateContext } from '../contexts/SelectedTemplateContext'
 import { convertPositionToDays } from '../utils/helpers'
+import Select from './Select'
 
 
 const schema = yup.object().shape({
@@ -170,7 +171,7 @@ function CreateTaskForm(props: {
                         {...register('type')}
                         name='type'
                         className='task_form-input'
-                        defaultValue={task?.type}
+                        placeholder='Select...'
                     >
                         <option value='action'>Action</option>
                         <option value='creative'>Creative</option>
@@ -178,6 +179,7 @@ function CreateTaskForm(props: {
                         <option value='promotion'>Promotion</option>
                         <option value='announcement'>Announcement</option>
                     </select>
+                    <Select />
                 </div>
                 <button className='submit-btn' type='submit'>{addTemplateEvent.isLoading || updateTemplateEvent.isLoading ? <Spinner /> : <FontAwesomeIcon icon={faPlusSquare} />}</button>
             </form>
