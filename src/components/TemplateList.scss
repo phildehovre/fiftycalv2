@@ -1,20 +1,22 @@
 .template_list-ctn {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    padding: 1em;
-    font-size: .9em;
+    // display: flex;
+    // flex-direction: column;
+    // align-items: flex-start;
+    // justify-content: flex-start;
+    // padding: 1em;
+    // font-size: .9em;
+    overflow-y: scroll;
+    // width: 15vw;
 }
 
-.template-btn {
-    cursor: pointer;
-    padding: .4em;
-    height: 1.1em;
-    transition: 150ms ease-in-out all;
-    color: var(--tertiary);
+// .template-btn {
+//     cursor: pointer;
+//     padding: .4em;
+//     height: 1.1em;
+//     transition: 150ms ease-in-out all;
+//     color: var(--tertiary);
 
-    &:hover {
-        color: var(--text-white)
-    }
-}
+//     &:hover {
+//         color: var(--text-white)
+//     }
+// }

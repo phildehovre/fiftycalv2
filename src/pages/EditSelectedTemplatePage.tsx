@@ -6,6 +6,7 @@ import Spinner from '../components/Spinner'
 import EditTemplateForm from '../components/EditTemplateForm'
 import Section from '../components/Section'
 import EditTemplateFormRefactor from '../components/EditTemplateFormRefactor'
+import EditingHeader from '../components/EditingHeader'
 
 function EditSelectedTemplatePage() {
 
@@ -31,11 +32,15 @@ function EditSelectedTemplatePage() {
 
     return (
         <Section>
-            {/* <h2>{templateData?.data.name}</h2> */}
-            {isTemplateEventsLoading && !templateData
-                ? <Spinner />
+            {!isTemplateEventsLoading && templateData && templateEventsData?.data
+                ? <Section flexDirection='column'>
+                    {/* {templateEventsData?.data.length > 0 && */}
+                    <EditingHeader events={templateEventsData?.data} />
+                    {/* } */}
+                    <EditTemplateFormRefactor template={templateData?.data} />
+                </Section>
                 // : <EditTemplateForm template={templateData?.data} />
-                : <EditTemplateFormRefactor template={templateData?.data} />
+                : <Spinner />
             }
         </Section>
 

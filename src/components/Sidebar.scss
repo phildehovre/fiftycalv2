@@ -3,10 +3,12 @@
     position: relative;
     border-right: 2px solid #373737;
     height: 100vh;
-    max-width: fit-content;
+    min-width: 15vw;
     flex-direction: column;
+    margin-left: auto;
 }
 
-.sidebar-btn {
-    cursor: pointer;
-}
+// .sidebar-btn {
+//     cursor: pointer;
+//     min-height: fit-content;
+// }
