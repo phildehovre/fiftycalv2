@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-import './EditTemplate.scss'
+import './EditTemplate.scss '
 import { TaskObj } from '../types/types'
 import { useCampaign, useCampaignEvents } from '../util/db'
 import { useParams, useLocation, } from 'react-router'

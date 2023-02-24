@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import './ColumnHeaders.scss'
+import './ColumnHeaders. '
 import EventCell from './EventCell'
 
 function ColumnHeaders(props: any) {

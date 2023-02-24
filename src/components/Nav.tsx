@@ -2,7 +2,7 @@ import React from 'react'
 import SupabaseLogin from './SupabaseLogin'
 import SupabaseSignOut from './SupabaseSignOut'
 import { Link } from 'react-router-dom'
-import './Nav.scss'
+import './Nav. '
 import { Session, useSession } from '@supabase/auth-helpers-react'
 import CreateTemplatePage from '../pages/CreateTemplatePage'
 

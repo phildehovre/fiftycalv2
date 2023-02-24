@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { useNavigate } from 'react-router'
 import { useTemplates, useCampaigns } from '../util/db'
-import './TemplateList.scss'
+import './TemplateList.scss '
 import { selectedTemplateContext } from '../contexts/SelectedTemplateContext'
 import { TemplateObj } from '../types/types'
 import { selectedCampaignContext } from '../contexts/SelectedCampaignContext'

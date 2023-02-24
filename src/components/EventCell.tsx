@@ -1,7 +1,7 @@
 import { faPencil } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useEffect, useRef } from 'react'
-import './EventSlice.scss'
+import './EventSlice.scss '
 import { useForm } from 'react-hook-form'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '../App'

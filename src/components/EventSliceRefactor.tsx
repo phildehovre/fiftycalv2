@@ -1,7 +1,7 @@
 import React from 'react'
 import { TaskObj } from '../types/types'
 import EventCell from './EventCell'
-import './EventSlice.scss'
+import './EventSlice.scss '
 import { convertDaysToUnits } from '../utils/helpers'
 import EventCellRefactor from './EventCellRefactor'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'

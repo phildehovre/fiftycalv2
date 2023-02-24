@@ -1,5 +1,5 @@
 import React from 'react'
-import './Section.scss'
+import './Section.scss '
 
 function Section(props: {
     children: React.ReactNode

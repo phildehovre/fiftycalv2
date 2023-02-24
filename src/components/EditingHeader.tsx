@@ -1,6 +1,6 @@
 import React from 'react'
 import ColumnHeaders from './ColumnHeaders'
-import './EditingHeader.scss'
+import './EditingHeader.scss '
 
 function EditingHeader(props: any) {
     const { events } = props

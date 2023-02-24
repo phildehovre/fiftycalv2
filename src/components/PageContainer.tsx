@@ -1,5 +1,5 @@
 import React from 'react'
-import './PageContainer.scss'
+import './PageContainer.scss '
 
 function PageContainer(props: { children: React.ReactNode }) {
     return (

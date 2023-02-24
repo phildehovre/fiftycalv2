@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
-import './Sidebar.scss'
+import './Sidebar.scss '
 import { faLayerGroup } from '@fortawesome/free-solid-svg-icons'
 import TemplateList from './TemplateList'
 
